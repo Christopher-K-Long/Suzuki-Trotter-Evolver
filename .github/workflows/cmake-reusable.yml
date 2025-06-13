@@ -1,0 +1,80 @@
+# Modified from https://github.com/lukka/CppBuildTasks-Validation/blob/v10/.github/workflows/hosted-ninja-vcpkg-install.yml
+# Copyright (c) 2019-2020-2021-2022-2023 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+#
+# The peculiarity of this workflow is that runs `vcpkg install` at `run-vcpkg`, 
+# rather than with `run-cmake.
+# Also, it does not assume that vcpkg is a submodule of this repository.
+#
+# The workflow does the following:
+# - Download and setup vcpkg (which is stored NOT in a Git submodule), then run
+#   `vcpkg install` to install the packages described in vcpkg.json manifest file.
+# - Note: at this point, all the vcpkg dependencies specified in vcpkg.json are installed,
+#   and it is possible to run anything that is needed to build the C++ application as.
+#   long the paths to headers and libraries are correctly set.
+#
+# - _Warning:_ in this sample, CMake is going to be used to build the application, 
+#   but anything else could be used. This means that vcpkg will be run again and 
+#   it will quickly realize that all dependencies are already installed.
+#   In short: *it is not needed to run vcpkg* in the step before if you build with CMake,
+#   since CMake will run it for you already! 
+#   Look to (hosted-ninja-vcpkg_submod.yml)[./hosted-ninja-vcpkg_submod.yml] sample.
+#
+# - Finally, it runs CMake with CMakePreset.json and vcpkg's toolchain file to build 
+#   the C++ sources with Ninja.
+name: Build and Test
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+
+jobs:
+  job:
+    name: Build and Test ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - uses: lukka/get-cmake@latest
+      - name: List $RUNNER_WORKSPACE before build
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        id: runvcpkg
+        with:
+          vcpkgDirectory: '${{ github.workspace }}/b/vcpkg'
+          runVcpkgInstall: true
+          vcpkgJsonGlob: 'vcpkg.json'
+          vcpkgConfigurationJsonGlob: 'vcpkg-configuration.json'
+
+      - name: Prints output of run-vcpkg's action.
+        run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
+
+      - name: Configure CMake
+        # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+        # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+        run: >
+          cmake -B ${{ github.workspace }}/build
+          -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/install
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/b/vcpkg/scripts/buildsystems/vcpkg.cmake
+          -DSuzuki-Trotter-Evolver_BUILD_DOCS=OFF
+          -S ${{ github.workspace }}
+  
+      - name: Build, Install, and Test
+        working-directory: ${{ github.workspace }}/build
+        # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+        run: cmake --build ${{ github.workspace }}/build --config Release --target install -j $(nproc)
+  
+      - name: List $RUNNER_WORKSPACE after build
+        run: find $RUNNER_WORKSPACE
+        shell: bash

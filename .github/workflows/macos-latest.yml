@@ -1,0 +1,11 @@
+name: Build and Test macOS-latest
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  macos-latest-build:
+    uses: ./.github/workflows/cmake-reusable.yml
+    with:
+      os: macos-latest

@@ -1,0 +1,11 @@
+name: Build and Test Windows-latest
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  windows-latest-build:
+    uses: ./.github/workflows/cmake-reusable.yml
+    with:
+      os: windows-latest

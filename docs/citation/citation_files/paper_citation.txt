@@ -1,0 +1,1 @@
+Long, C. K., Mayhall, N. J., Economou, S. E., Barnes, E., Barnes, C. H. W., Martins, F., … Mertig, N. (2024). Minimal evolution times for fast, pulse-based state preparation in silicon spin qubits. arXiv [Quant-Ph]. Retrieved from http://arxiv.org/abs/2406.10913

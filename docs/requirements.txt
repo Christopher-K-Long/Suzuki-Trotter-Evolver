@@ -1,0 +1,7 @@
+furo
+sphinx
+exhale
+breathe
+myst-parser
+sphinx_tabs
+cffconvert

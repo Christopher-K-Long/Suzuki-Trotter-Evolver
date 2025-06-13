@@ -1,0 +1,11 @@
+name: Build and Test Ubuntu-latest
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  ubuntu-latest-build:
+    uses: ./.github/workflows/cmake-reusable.yml
+    with:
+      os: ubuntu-latest

@@ -1,0 +1,122 @@
+name: Release
+on: [workflow_dispatch]
+jobs:
+  
+  build:
+    name: Generate Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # IMPORTANT: mandatory for making GitHub Releases
+    steps:
+    - uses: actions/checkout@master
+    - name: Check date-released in CITATION.cff
+      run: |
+        DATE=$(cat CITATION.cff | perl -nle"print $& while m{(?<=date-released: ').*(?=')}g")
+        if [ "$DATE" != "$(date +%Y-%m-%d)" ]; then
+          echo "CITATION.cff date-released is not today. Please update it."
+          exit 1
+        fi
+
+    - name: Get Version
+      run: |
+        echo "VERSION=$(cat "CMakeLists.txt" | perl -nle'print $& while m{(?<=project\(Suzuki-Trotter-Evolver VERSION ).*}g')" >> $GITHUB_OUTPUT
+      id: version
+
+    - name: Install Doxygen
+      run: sudo apt-get install doxygen
+    
+    - name: Setup Python Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.x"
+
+    - name: Install Python Packages
+      run: |
+        python -m pip install sphinx
+        python -m pip install -r docs/requirements.txt
+
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v11
+      id: runvcpkg
+      with:
+        vcpkgDirectory: '${{ github.workspace }}/b/vcpkg'
+        runVcpkgInstall: true
+        vcpkgJsonGlob: 'vcpkg.json'
+        vcpkgConfigurationJsonGlob: 'vcpkg-configuration.json'
+    
+    - name: Prints output of run-vcpkg's action.
+      run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: >
+        cmake -B ${{ github.workspace }}/build
+        -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/install
+        -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/b/vcpkg/scripts/buildsystems/vcpkg.cmake
+        -DSuzuki-Trotter-Evolver_BUILD_TESTING=OFF
+        -S ${{ github.workspace }}
+    
+    - name: Build and Install
+      working-directory: ${{ github.workspace }}/build
+      # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: cmake --build ${{ github.workspace }}/build --config Release --target install -j $(nproc)
+
+    - name: Archive Install ZIP
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'zip'
+        filename: '${{ github.workspace }}/release/Suzuki-Trotter-Evolver-v${{ steps.version.outputs.VERSION }}.zip'
+        directory: '${{ github.workspace }}/install'
+        command: "mkdir -p ${{ github.workspace }}/release"
+        exclusions: '*.git* /*node_modules/* .editorconfig ${{ github.workspace }}/release'
+
+    - name: Archive Install TAR
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'tar'
+        filename: '${{ github.workspace }}/release/Suzuki-Trotter-Evolver-v${{ steps.version.outputs.VERSION }}.tar.gz'
+        directory: '${{ github.workspace }}/install'
+        command: "mkdir -p ${{ github.workspace }}/release"
+        exclusions: '*.git* /*node_modules/* .editorconfig ${{ github.workspace }}/release'
+
+    - name: Archive Documentation ZIP
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'zip'
+        filename: '${{ github.workspace }}/release/Suzuki-Trotter-Evolver-v${{ steps.version.outputs.VERSION }}_documentation.zip'
+        directory: '${{ github.workspace }}/install/share/doc'
+        command: "mkdir -p ${{ github.workspace }}/release"
+        exclusions: '*.git* /*node_modules/* .editorconfig ${{ github.workspace }}/release'
+
+    - name: Archive Documentation TAR
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'tar'
+        filename: '${{ github.workspace }}/release/Suzuki-Trotter-Evolver-v${{ steps.version.outputs.VERSION }}_documentation.tar.gz'
+        directory: '${{ github.workspace }}/install/share/doc'
+        command: "mkdir -p ${{ github.workspace }}/release"
+        exclusions: '*.git* /*node_modules/* .editorconfig ${{ github.workspace }}/release'
+
+    - name: Create GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        RELEASE_NOTES=$(cat ChangeLog.md | grep -Pzo '(?<=##\sRelease\s${{ steps.version.outputs.VERSION }})[\S\s]*?(?=##|$)' | tr -d '\0')
+        if [ -z "$RELEASE_NOTES" ]; then
+            echo "No release notes found."
+            exit 1
+        fi
+        gh release create "v${{ steps.version.outputs.VERSION }}" --repo "$GITHUB_REPOSITORY" --title "v${{ steps.version.outputs.VERSION }}" --notes "${RELEASE_NOTES}"
+    - name: Upload artifact signatures to GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      # Upload to GitHub Release using the `gh` CLI.
+      # `dist/` contains the built packages, and the
+      # sigstore-produced signatures and certificates.
+      run: >-
+        gh release upload
+        "v${{ steps.version.outputs.VERSION }}" ${{ github.workspace }}/release/**
+        --repo "$GITHUB_REPOSITORY"

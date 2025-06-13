@@ -1,0 +1,11 @@
+{
+  "name": "suzuki-trotter-evolver",
+  "version": "1.0.0",
+  "dependencies": [
+    {
+      "name": "catch2",
+      "host": true
+    },
+    "eigen3"
+  ]
+}
