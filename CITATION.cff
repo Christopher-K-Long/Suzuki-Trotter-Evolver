@@ -35,10 +35,10 @@ keywords:
   - suzuki
   - trotter
   - simulation
-  - intergrator
+  - integrator
   - integration
   - unitary
   - quantum
 license: Apache-2.0
 version: 1.0.0
-date-released: '2025-05-04'
+date-released: '2025-06-13'
