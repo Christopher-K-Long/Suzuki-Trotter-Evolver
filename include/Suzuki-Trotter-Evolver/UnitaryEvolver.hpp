@@ -486,6 +486,7 @@ struct UnitaryEvolver {
         \f$\Delta t\f$ is smaller than \f$\frac{1}{2\Omega}\f$ where
         \f$\Omega\f$ is the largest energy or frequency in the system.
 
+        @tparam l The number of state vectors to propagate.
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
         time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
@@ -496,7 +497,6 @@ struct UnitaryEvolver {
         @param dt (\f$\Delta t\f$) The time step to propagate by.
         @return The propagated state vectors:
         \f$\left(\psi_k(N\Delta t)\right)_k\f$.
-        @tparam l The number of state vectors to propagate.
     */
     template<int l = Dynamic>
     DMatrix<dim, l> propagate_collection(DMatrix<Dynamic, n_ctrl> ctrl_amp,
