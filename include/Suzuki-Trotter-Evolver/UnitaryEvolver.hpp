@@ -592,8 +592,8 @@ struct UnitaryEvolver {
         \f$\left(\psi(n\Delta t)\right)_{n=0}^N\f$.
     */
     DMatrix<dim, Dynamic> propagate_all(DMatrix<Dynamic, n_ctrl> ctrl_amp,
-                                      DMatrix<dim, 1> state,
-                                      double dt) {
+                                        DMatrix<dim, 1> state,
+                                        double dt) {
         size_t steps = ctrl_amp.rows();
         DMatrix<dim, 1> exp_d0 = (d0*dt).exp().matrix();
         DMatrix<dim, Dynamic> phi(state.rows(), steps+1);
