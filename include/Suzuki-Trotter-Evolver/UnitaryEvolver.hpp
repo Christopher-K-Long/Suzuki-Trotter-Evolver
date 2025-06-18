@@ -52,15 +52,15 @@ double unitary_gate_infidelity(const Eigen::MatrixBase<Derived>& gate,
     A struct to store the diagonalised drift and control Hamiltonians. On
     initialisation the Hamiltonians are diagonalised and the eigenvectors and
     values stored. This initial diagonalisation may be slow and takes
-    \f$O(\textrm{dim}^3)\f$
+    \f$O(\texttt{dim}^3)\f$
     time for a
-    \f$\textrm{dim}\times \textrm{dim}\f$
+    \f$\texttt{dim}\times \texttt{dim}\f$
     Hamiltonian. However, it  allows each step of the Suzuki-Trotter expansion
     to be implimented in
-    \f$O(\textrm{dim}^2)\f$
+    \f$O(\texttt{dim}^2)\f$
     time with matrix multiplication and only scalar exponentiation opposed to
     matrix exponentiation which takes
-    \f$O(\textrm{dim}^3)\f$
+    \f$O(\texttt{dim}^3)\f$
     time.
 
     @tparam n_ctrl The number of control Hamiltonians.
@@ -100,11 +100,11 @@ struct UnitaryEvolver {
 
     /**
         The eigenvalues,
-        \f$\left(\operatorname{diag}(D_i)\right)_{i=1}^{\textrm{length}}\f$,
+        \f$\left(\operatorname{diag}(D_i)\right)_{i=1}^{\texttt{length}}\f$,
         of the control Hamiltonians:
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
-        \f$i\in\left[\textrm{length}\right]\f$.
+        \f$i\in\left[\texttt{length}\right]\f$.
     */
     vector<Eigen::Array<complex<double>, dim, 1>> ds;
 
@@ -126,7 +126,7 @@ struct UnitaryEvolver {
 
     /**
         The unitary transformations,
-        \f$(U_i^\dagger U_{i-1})_{i=1}^{\textrm{length}}\f$,
+        \f$(U_i^\dagger U_{i-1})_{i=1}^{\texttt{length}}\f$,
         from the eigen basis of
         \f$H_{i-1}\f$
         to the eigen basis of
@@ -136,21 +136,21 @@ struct UnitaryEvolver {
 
     /**
         The unitary transformations,
-        \f$\left(U_i\right)_{i=1}^{\textrm{length}}\f$,
+        \f$\left(U_i\right)_{i=1}^{\texttt{length}}\f$,
         that diagonalise the control Hamiltonians:
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
-        \f$i\in\left[\textrm{length}\right]\f$.
+        \f$i\in\left[\texttt{length}\right]\f$.
     */
     vector<Matrix> us_individual;
 
     /**
         The inverse of the unitary transformations,
-        \f$(U_i^\dagger)_{i=1}^{\textrm{length}}\f$,
+        \f$(U_i^\dagger)_{i=1}^{\texttt{length}}\f$,
         that diagonalise the control Hamiltonians:
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
-        \f$i\in\left[\textrm{length}\right]\f$.
+        \f$i\in\left[\texttt{length}\right]\f$.
     */
     vector<Matrix> us_inverse_individual;
 
@@ -158,15 +158,15 @@ struct UnitaryEvolver {
         The control Hamiltonians:
         \f$H_i\f$
         for all
-        \f$i\in\left[\textrm{length}\right]\f$.
+        \f$i\in\left[\texttt{length}\right]\f$.
     */
     vector<Matrix> hs;
 
     /**
         The unitary transformation,
-        \f$U_0^\dagger U_{\textrm{length}}\f$,
+        \f$U_0^\dagger U_{\texttt{length}}\f$,
         from the eigen basis of
-        \f$H_{\textrm{length}}\f$
+        \f$H_{\texttt{length}}\f$
         to the eigen basis of
         \f$H_0\f$.
     */
@@ -175,7 +175,7 @@ struct UnitaryEvolver {
     /**
         Initialises a new unitary evolver with the Hamiltonian
         @f[
-            H(t)=H_0+\sum_{j=1}^{\textrm{length}}a_j(t)H_j,
+            H(t)=H_0+\sum_{j=1}^{\texttt{length}}a_j(t)H_j,
         @f]
         where \f$H_0\f$ is the drift Hamiltonian and \f$H_j\f$ are the control
         Hamiltonians modulated by control amplitudes \f$a_j(t)\f$ which need
@@ -230,7 +230,7 @@ struct UnitaryEvolver {
     /**
         Initialises a new unitary evolver with a sparse Hamiltonian.
         @f[
-            H(t)=H_0+\sum_{j=1}^{\textrm{length}}a_j(t)H_j,
+            H(t)=H_0+\sum_{j=1}^{\texttt{length}}a_j(t)H_j,
         @f]
         where \f$H_0\f$ is the drift Hamiltonian and \f$H_j\f$ are the control
         Hamiltonians modulated by control amplitudes \f$a_j(t)\f$ which need
@@ -290,11 +290,11 @@ struct UnitaryEvolver {
         \f$H_0=U_0D_0U_0^\dagger\f$.
         Initialises ``UnitaryEvolver::d0``.
         @param ds The eigenvalues,
-        \f$\left(\operatorname{diag}(D_i)\right)_{i=1}^{\textrm{length}}\f$,
+        \f$\left(\operatorname{diag}(D_i)\right)_{i=1}^{\texttt{length}}\f$,
         of the control Hamiltonians:
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
-        \f$i\in\left[\textrm{length}\right]\f$.
+        \f$i\in\left[\texttt{length}\right]\f$.
         Initialises ``UnitaryEvolver::ds``.
         @param u0 The unitary transformation,
         \f$U_0\f$,
@@ -307,35 +307,35 @@ struct UnitaryEvolver {
         \f$H_0=U_0D_0U_0^\dagger\f$.
         Initialises ``UnitaryEvolver::u0_inverse``.
         @param us The unitary transformations,
-        \f$(U_i^\dagger U_{i-1})_{i=1}^{\textrm{length}}\f$,
+        \f$(U_i^\dagger U_{i-1})_{i=1}^{\texttt{length}}\f$,
         from the eigen basis of
         \f$H_{i-1}\f$
         to the eigen basis of
         \f$H_i\f$.
         Initialises ``UnitaryEvolver::us``.
         @param us_individual The unitary transformations,
-        \f$\left(U_i\right)_{i=1}^{\textrm{length}}\f$,
+        \f$\left(U_i\right)_{i=1}^{\texttt{length}}\f$,
         that diagonalise the control Hamiltonians:
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
-        \f$i\in\left[\textrm{length}\right]\f$.
+        \f$i\in\left[\texttt{length}\right]\f$.
         Initialises ``UnitaryEvolver::us_individual``.
         @param us_inverse_individual The inverse of the unitary transformations,
-        \f$(U_i^\dagger)_{i=1}^{\textrm{length}}\f$,
+        \f$(U_i^\dagger)_{i=1}^{\texttt{length}}\f$,
         that diagonalise the control Hamiltonians:
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
-        \f$i\in\left[\textrm{length}\right]\f$.
+        \f$i\in\left[\texttt{length}\right]\f$.
         Initialises ``UnitaryEvolver::us_inverse_individual``.
         @param control_hamiltonians The control Hamiltonians:
         \f$H_i\f$
         for all
-        \f$i\in\left[\textrm{length}\right]\f$.
+        \f$i\in\left[\texttt{length}\right]\f$.
         Initialises ``UnitaryEvolver::hs``.
         @param u0_inverse_u_last The unitary transformation,
-        \f$U_0^\dagger U_{\textrm{length}}\f$,
+        \f$U_0^\dagger U_{\texttt{length}}\f$,
         from the eigen basis of
-        \f$H_{\textrm{length}}\f$
+        \f$H_{\texttt{length}}\f$
         to the eigen basis of
         \f$H_0\f$.
         Initialises ``UnitaryEvolver::u0_inverse_u_last``.
@@ -373,9 +373,9 @@ struct UnitaryEvolver {
         using the first-order Suzuki-Trotter expansion:     
         @f[
         \begin{align}
-            \psi(N\Delta t)&=\prod_{i=1}^N\prod_{j=0}^{\textrm{length}}
+            \psi(N\Delta t)&=\prod_{i=1}^N\prod_{j=0}^{\texttt{length}}
                 e^{-ia_{ij}H_j\Delta t}\psi(0)+\mathcal E\\
-            &=\prod_{i=1}^N\prod_{j=0}^{\textrm{length}}
+            &=\prod_{i=1}^N\prod_{j=0}^{\texttt{length}}
                 U_je^{-ia_{ij}D_j\Delta t}U_j^\dagger\psi(0)+\mathcal E.
         \end{align}
         @f]
@@ -389,13 +389,13 @@ struct UnitaryEvolver {
         @f[
         \begin{align}
         \mathcal E&=\mathcal O\left(
-            \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\textrm{length}}\dot a_{ij}
+            \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\texttt{length}}\dot a_{ij}
             \norm{H_j}
-            +\sum_{i=1}^N\sum_{j,k=0}^{\textrm{length}}a_{ij}a_{ik}
+            +\sum_{i=1}^N\sum_{j,k=0}^{\texttt{length}}a_{ij}a_{ik}
             \norm{[H_j,H_k]}\right]
             \right)\\
         &=\mathcal O\left(
-            N\Delta t^2\textrm{length}\left[\omega E+\alpha^2+E^2\right]
+            N\Delta t^2\texttt{length}\left[\omega E+\alpha^2+E^2\right]
             \right)
         \end{align}
         @f]
@@ -403,10 +403,10 @@ struct UnitaryEvolver {
         @f[
         \begin{align}
             \omega&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
-                j\in\left[1,\textrm{length}\right]}}\left|\dot a_{ij}\right|,\\
+                j\in\left[1,\texttt{length}\right]}}\left|\dot a_{ij}\right|,\\
             \alpha&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
-                j\in\left[0,\textrm{length}\right]}}\left|a_{ij}\right|,\\
-            E&\coloneqq\max_{j\in\left[0,\textrm{length}\right]}\norm{H_j}.
+                j\in\left[0,\texttt{length}\right]}}\left|a_{ij}\right|,\\
+            E&\coloneqq\max_{j\in\left[0,\texttt{length}\right]}\norm{H_j}.
         \end{align}
         @f]
         Note the error is quadratic in \f$\Delta t\f$ but linear in \f$N\f$.
@@ -417,7 +417,7 @@ struct UnitaryEvolver {
         \f$\Omega\f$ is the largest energy or frequency in the system.
 
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
@@ -462,9 +462,9 @@ struct UnitaryEvolver {
         using the first-order Suzuki-Trotter expansion:     
         @f[
         \begin{align}
-            \psi_k(N\Delta t)&=\prod_{i=1}^N\prod_{j=0}^{\textrm{length}}
+            \psi_k(N\Delta t)&=\prod_{i=1}^N\prod_{j=0}^{\texttt{length}}
                 e^{-ia_{ij}H_j\Delta t}\psi_k(0)+\mathcal E\\
-            &=\prod_{i=1}^N\prod_{j=0}^{\textrm{length}}
+            &=\prod_{i=1}^N\prod_{j=0}^{\texttt{length}}
                 U_je^{-ia_{ij}D_j\Delta t}U_j^\dagger\psi_k(0)+\mathcal E.
         \end{align}
         @f]
@@ -478,13 +478,13 @@ struct UnitaryEvolver {
         @f[
         \begin{align}
         \mathcal E&=\mathcal O\left(
-            \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\textrm{length}}\dot a_{ij}
+            \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\texttt{length}}\dot a_{ij}
             \norm{H_j}
-            +\sum_{i=1}^N\sum_{j,k=0}^{\textrm{length}}a_{ij}a_{ik}
+            +\sum_{i=1}^N\sum_{j,k=0}^{\texttt{length}}a_{ij}a_{ik}
             \norm{[H_j,H_k]}\right]
             \right)\\
         &=\mathcal O\left(
-            N\Delta t^2\textrm{length}\left[\omega E+\alpha^2+E^2\right]
+            N\Delta t^2\texttt{length}\left[\omega E+\alpha^2+E^2\right]
             \right)
         \end{align}
         @f]
@@ -492,10 +492,10 @@ struct UnitaryEvolver {
         @f[
         \begin{align}
             \omega&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
-                j\in\left[1,\textrm{length}\right]}}\left|\dot a_{ij}\right|,\\
+                j\in\left[1,\texttt{length}\right]}}\left|\dot a_{ij}\right|,\\
             \alpha&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
-                j\in\left[0,\textrm{length}\right]}}\left|a_{ij}\right|,\\
-            E&\coloneqq\max_{j\in\left[0,\textrm{length}\right]}\norm{H_j}.
+                j\in\left[0,\texttt{length}\right]}}\left|a_{ij}\right|,\\
+            E&\coloneqq\max_{j\in\left[0,\texttt{length}\right]}\norm{H_j}.
         \end{align}
         @f]
         Note the error is quadratic in \f$\Delta t\f$ but linear in \f$N\f$.
@@ -505,8 +505,9 @@ struct UnitaryEvolver {
         \f$\Delta t\f$ is smaller than \f$\frac{1}{2\Omega}\f$ where
         \f$\Omega\f$ is the largest energy or frequency in the system.
 
+        @tparam l The number of state vectors to propagate.
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param states \f$\left[\left(\psi(0)\right)_{k}\right]\f$ A collection
@@ -555,10 +556,10 @@ struct UnitaryEvolver {
         using the first-order Suzuki-Trotter expansion:     
         @f[
         \begin{align}
-            \psi(n\Delta t)&=\prod_{i=1}^n\prod_{j=0}^{\textrm{length}}
+            \psi(n\Delta t)&=\prod_{i=1}^n\prod_{j=0}^{\texttt{length}}
                 e^{-ia_{ij}H_j\Delta t}\psi(0)+\mathcal E
                 \quad\forall n\in\left[0, N\right]\\
-            &=\prod_{i=1}^n\prod_{j=0}^{\textrm{length}}
+            &=\prod_{i=1}^n\prod_{j=0}^{\texttt{length}}
                 U_je^{-ia_{ij}D_j\Delta t}U_j^\dagger\psi(0)+\mathcal E
                 \quad\forall n\in\left[0, N\right].
         \end{align}
@@ -573,13 +574,13 @@ struct UnitaryEvolver {
         @f[
         \begin{align}
         \mathcal E&=\mathcal O\left(
-            \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\textrm{length}}\dot a_{ij}
+            \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\texttt{length}}\dot a_{ij}
             \norm{H_j}
-            +\sum_{i=1}^N\sum_{j,k=0}^{\textrm{length}}a_{ij}a_{ik}
+            +\sum_{i=1}^N\sum_{j,k=0}^{\texttt{length}}a_{ij}a_{ik}
             \norm{[H_j,H_k]}\right]
             \right)\\
         &=\mathcal O\left(
-            N\Delta t^2\textrm{length}\left[\omega E+\alpha^2+E^2\right]
+            N\Delta t^2\texttt{length}\left[\omega E+\alpha^2+E^2\right]
             \right)
         \end{align}
         @f]
@@ -587,10 +588,10 @@ struct UnitaryEvolver {
         @f[
         \begin{align}
             \omega&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
-                j\in\left[1,\textrm{length}\right]}}\left|\dot a_{ij}\right|,\\
+                j\in\left[1,\texttt{length}\right]}}\left|\dot a_{ij}\right|,\\
             \alpha&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
-                j\in\left[0,\textrm{length}\right]}}\left|a_{ij}\right|,\\
-            E&\coloneqq\max_{j\in\left[0,\textrm{length}\right]}\norm{H_j}.
+                j\in\left[0,\texttt{length}\right]}}\left|a_{ij}\right|,\\
+            E&\coloneqq\max_{j\in\left[0,\texttt{length}\right]}\norm{H_j}.
         \end{align}
         @f]
         Note the error is quadratic in \f$\Delta t\f$ but linear in \f$N\f$.
@@ -601,7 +602,7 @@ struct UnitaryEvolver {
         \f$\Omega\f$ is the largest energy or frequency in the system.
 
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
@@ -645,7 +646,7 @@ struct UnitaryEvolver {
         ``propagate()``.
 
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
@@ -671,7 +672,7 @@ struct UnitaryEvolver {
         ``propagate_all()``.
 
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
@@ -767,9 +768,9 @@ struct UnitaryEvolver {
         \begin{align}
             &\phi_j(n\Delta t)=\frac{1}{\Delta t}\pdv{J}{a_{nj}}\\
             &=\!2\operatorname{Im}\!\left(\psi^\dagger(T)
-                \hat O\!\!\left[\prod_{i>n}^N\prod_{k=1}^{\textrm{length}}
+                \hat O\!\!\left[\prod_{i>n}^N\prod_{k=1}^{\texttt{length}}
                 e^{-ia_{ik}H_k\Delta t}\right]\!\!\!
-                \left[\prod_{k=j}^{\textrm{length}}
+                \left[\prod_{k=j}^{\texttt{length}}
                 e^{-ia_{nk}H_k\Delta t}\right]\!H_j\!\!
                 \left[\prod_{k=0}^{j-1}
                 e^{-ia_{nk}H_k\Delta t}\right]
@@ -783,7 +784,7 @@ struct UnitaryEvolver {
         as in ``propagate()``.
 
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param state \f$\left[\psi(0)\right]\f$ The initial state vector.
@@ -794,7 +795,7 @@ struct UnitaryEvolver {
         the switching function,
         \f$\phi_j(n\Delta t)\f$
         for all
-        \f$j\in\left[1,\textrm{length}\right]\f$
+        \f$j\in\left[1,\texttt{length}\right]\f$
         and
         \f$n\in\left[1,N\right]\f$.
 
