@@ -59,8 +59,9 @@ struct UnitaryEvolver {
 
     /**
         The dimension of rows in each control Hamiltonian multiplied by the
-        number of control Hamiltonians. This is the number of rows in for the
-        ``control_hamiltonians`` argument for ``UnitaryEvolver::UnitaryEvolver()``.
+        number of control Hamiltonians. This is the number of rows in the
+        ``control_hamiltonians`` argument of
+        ``UnitaryEvolver::UnitaryEvolver()``.
     */
     static const int dim_x_n_ctrl = (dim == Dynamic || n_ctrl == Dynamic)
                        ? Dynamic
