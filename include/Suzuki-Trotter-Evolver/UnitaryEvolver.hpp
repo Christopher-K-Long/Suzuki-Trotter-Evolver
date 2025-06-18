@@ -30,6 +30,25 @@ template<int n = Dynamic, int m = Dynamic> using DMatrix =
 typedef Eigen::SparseMatrix<complex<double>> SMatrix;
 
 /**
+    Computes the gate infidelity between a gate and a target gate:
+    @f[
+    \mathcal I(\texttt{gate}, \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot \texttt{gate}\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
+    @f]
+
+    @param gate The gate to compute the infidelity of.
+    @param target The target gate to compute the infidelity with respect to.
+    @return The gate infidelity:
+    \f$\mathcal I(\texttt{gate}, \texttt{target})\f$.
+*/
+template <typename Derived>
+double unitary_gate_infidelity(const Eigen::MatrixBase<Derived>& gate,
+                               const Eigen::MatrixBase<Derived>& target) {
+    Eigen::Index d = target.rows();
+    return 1-(std::pow(std::abs((target.adjoint()*gate).trace()),2)+d) /
+             (d*(d+1));
+};
+
+/**
     A struct to store the diagonalised drift and control Hamiltonians. On
     initialisation the Hamiltonians are diagonalised and the eigenvectors and
     values stored. This initial diagonalisation may be slow and takes
@@ -496,7 +515,6 @@ struct UnitaryEvolver {
         @param dt (\f$\Delta t\f$) The time step to propagate by.
         @return The propagated state vectors:
         \f$\left(\psi_k(N\Delta t)\right)_k\f$.
-        @tparam l The number of state vectors to propagate.
     */
     template<int l = Dynamic>
     DMatrix<dim, l> propagate_collection(DMatrix<Dynamic, n_ctrl> ctrl_amp,
@@ -673,6 +691,62 @@ struct UnitaryEvolver {
     };
 
     /**
+        Calculates the real inner product of an evolved state vector with a
+        fixed vector. The evolved state vector is evolved under a control
+        Hamiltonian modulated by the control amplitudes. The integration is
+        performed using ``propagate()``.
+
+        @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
+        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        element \f$a_{ij}\f$ corresponds to the control amplitude of the
+        \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
+        @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
+        @param dt (\f$\Delta t\f$) The time step to propagate by.
+        @param fixed_vector \f$(\xi)\f$ The fixed vector to calculate the
+        expectation value of.
+        @return The inner product of the evolved state vector with the fixed
+        vector:
+        \f$\sum_{i=1}^\texttt{dim}\xi_i\psi_i(N\Delta t)\f$.
+
+        Also see ``evolved_inner_product_all()``.
+    */
+    complex<double> evolved_inner_product(DMatrix<Dynamic, n_ctrl> ctrl_amp,
+                                          DMatrix<dim, 1> state,
+                                          double dt,
+                                          DMatrix<1, dim> fixed_vector) {
+        state = propagate(ctrl_amp, state, dt);
+        return fixed_vector*state;
+    };
+
+    /**
+        Calculates the real inner products of a time series of evolved state
+        vectors with a fixed vector. The evolved state vector is evolved under a
+        control Hamiltonian modulated by the control amplitudes. The integration
+        is performed using ``propagate_all()``.
+
+        @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
+        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        element \f$a_{ij}\f$ corresponds to the control amplitude of the
+        \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
+        @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
+        @param dt (\f$\Delta t\f$) The time step to propagate by.
+        @param fixed_vector \f$(\xi)\f$ The fixed vector to calculate the
+        expectation value of.
+        @return The inner products of the evolved state vectors with the fixed
+        vector:
+        \f$\left(\sum_{i=1}^\texttt{dim}\xi_i\psi_i(n\Delta t)\right)_{n=0}^N\f$.
+
+        Also see ``evolved_inner_product()``.
+    */
+    DMatrix<Dynamic, 1> evolved_inner_product_all(DMatrix<Dynamic, n_ctrl> ctrl_amp,
+                                                  DMatrix<dim, 1> state,
+                                                  double dt,
+                                                  DMatrix<1, dim> observable) {
+        DMatrix<dim, Dynamic> phi = propagate_all(ctrl_amp, state, dt);
+        return observable*phi;
+    };
+
+    /**
         Calculates the switching function for a Mayer problem with an
         expectation value as the cost function. More precisely if the cost
         function is
@@ -723,6 +797,8 @@ struct UnitaryEvolver {
         \f$j\in\left[1,\textrm{length}\right]\f$
         and
         \f$n\in\left[1,N\right]\f$.
+
+        Also see ``gate_switching_function()``.
     */
     std::tuple<complex<double>, Eigen::Matrix<double, Dynamic, n_ctrl>>
     switching_function(DMatrix<Dynamic, n_ctrl> ctrl_amp,
@@ -790,6 +866,229 @@ struct UnitaryEvolver {
                 E,
                 2*out.imag()
         );
+    };
+    /**
+        Computes the unitary corresponding to the evolution under the
+        differential equation
+        @f[
+        \dot U=-iHU.
+        @f]
+        The computation is performed using the first-order Suzuki-Trotter
+        expansion:     
+        @f[
+        \begin{align}
+            U(N\Delta t)&=\prod_{i=1}^N\prod_{j=0}^{\textrm{length}}
+                e^{-ia_{ij}H_j\Delta t}+\mathcal E\\
+            &=\prod_{i=1}^N\prod_{j=0}^{\textrm{length}}
+                U_je^{-ia_{ij}D_j\Delta t}U_j^\dagger+\mathcal E.
+        \end{align}
+        @f]
+        where
+        \f$a_{nj}\coloneqq a(n\Delta t)\f$,
+        we set
+        $a_{n0}=1$
+        for notational ease, and the additive error
+        \f$\mathcal E\f$
+        is
+        @f[
+        \begin{align}
+        \mathcal E&=\mathcal O\left(
+            \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\textrm{length}}\dot a_{ij}
+            \norm{H_j}
+            +\sum_{i=1}^N\sum_{j,k=0}^{\textrm{length}}a_{ij}a_{ik}
+            \norm{[H_j,H_k]}\right]
+            \right)\\
+        &=\mathcal O\left(
+            N\Delta t^2\textrm{length}\left[\omega E+\alpha^2+E^2\right]
+            \right)
+        \end{align}
+        @f]
+        where \f$\dot a_{nj}\coloneqq\dot a_j(n\Delta t)\f$ and
+        @f[
+        \begin{align}
+            \omega&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
+                j\in\left[1,\textrm{length}\right]}}\left|\dot a_{ij}\right|,\\
+            \alpha&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
+                j\in\left[0,\textrm{length}\right]}}\left|a_{ij}\right|,\\
+            E&\coloneqq\max_{j\in\left[0,\textrm{length}\right]}\norm{H_j}.
+        \end{align}
+        @f]
+        Note the error is quadratic in \f$\Delta t\f$ but linear in \f$N\f$.
+        We can also view this as being linear in \f$\Delta t\f$ and linear in
+        total evolution time \f$N\Delta t\f$. Additionally, by Nyquist's theorem
+        this asymptotic error scaling will not be achieved until the time step
+        \f$\Delta t\f$ is smaller than \f$\frac{1}{2\Omega}\f$ where
+        \f$\Omega\f$ is the largest energy or frequency in the system.
+
+        @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
+        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        element \f$a_{ij}\f$ corresponds to the control amplitude of the
+        \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
+        @param dt (\f$\Delta t\f$) The time step to evolve by.
+        @return The unitary corresponding to the evolution:
+        \f$U(N\Delta t)\f$.
+
+        Also see ``propagate()``, ``propagate_all()``, and
+        ``propagate_collection()``.
+    */
+    DMatrix<dim, dim> get_evolution(DMatrix<Dynamic, n_ctrl> ctrl_amp,
+                                    double dt) {
+        size_t steps = ctrl_amp.rows();
+        Eigen::Array<complex<double>, dim, 1> exp_d0 = (d0*dt).exp();
+
+        ctrl_amp *= dt;
+        DMatrix<dim, dim> u = (DMatrix<dim, dim>)u0_inverse;
+        u = u.array().colwise() * exp_d0;
+        for (size_t j = 0; j < length; j++) {
+            u = us[j] * u;
+            u = u.array().colwise() * (ds[j]*ctrl_amp(0, j)).exp();
+        }
+        for (size_t i = 1; i < steps; i++) {
+            u = u0_inverse_u_last * u;
+            u = u.array().colwise() * exp_d0;
+            for (size_t j = 0; j < length; j++) {
+                u = us[j] * u;
+                u = u.array().colwise() * (ds[j]*ctrl_amp(i, j)).exp();
+            }
+        }
+        u = us[length] * u;
+        return u;
+    };
+    /**
+        Calculates the gate infidelity with respect to a target gate of the gate
+        produced by the control Hamiltonian modulated by the control amplitudes.
+        The integration is performed using
+        ``get_evolution()``.
+
+        @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
+        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        element \f$a_{ij}\f$ corresponds to the control amplitude of the
+        \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
+        @param dt (\f$\Delta t\f$) The time step to evolve by.
+        @param target The target gate to calculate the infidelity with respect
+        to.
+        @return The gate infidelity with respect to the target gate:
+        @f[
+        \mathcal I(\texttt{gate}, \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot \texttt{gate}\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
+        @f]
+
+        Also see ``gate_infidelity()``.
+    */
+    double evolved_gate_infidelity(DMatrix<Dynamic, n_ctrl> ctrl_amp,
+                                            double dt,
+                                            DMatrix<dim, dim> target) {
+        DMatrix<dim, dim> U = get_evolution(ctrl_amp, dt);
+        return unitary_gate_infidelity(U, target);
+    };
+    /**
+        Calculates the switching function for a Mayer problem with the
+        gate infidelity as the cost function. More precisely if the cost
+        function is
+        @f[
+        J\left[\vec a(t)\right]\coloneqq\mathcal I(U\left[\vec a(t); T\right], \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot U\left[\vec a(t); T\right]\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
+        @f]
+        where \f$T=N\Delta t\f$, then the switching function is
+        @f[
+        \phi_j(t)\coloneqq\frac{\delta J}{\delta a_j(t)}
+            =2\operatorname{Im}\left(\psi^\dagger[\vec a(t);T]
+            \hat OU(t\to T)H_j\psi[\vec a(t);t]\right).
+        @f]
+        Using the first-order Suzuki-Trotter expansion we can express the
+        switching function as
+        @f[
+        \begin{align}
+            &\phi_j(n\Delta t)=\frac{1}{\Delta t}\pdv{J}{a_{nj}}\\
+            &=\!2\operatorname{Im}\!\left(\psi^\dagger(T)
+                \hat O\!\!\left[\prod_{i>n}^N\prod_{k=1}^{\textrm{length}}
+                e^{-ia_{ik}H_k\Delta t}\right]\!\!\!
+                \left[\prod_{k=j}^{\textrm{length}}
+                e^{-ia_{nk}H_k\Delta t}\right]\!H_j\!\!
+                \left[\prod_{k=0}^{j-1}
+                e^{-ia_{nk}H_k\Delta t}\right]
+                \!\psi(\left[n-1\right]\Delta t)\right),
+        \end{align}
+        @f]
+        where for numerical efficiency we replace
+        \f$e^{-ia_{ik}H_k\Delta t}\f$
+        with
+        \f$U_ke^{-ia_{ik}D_k\Delta t}U_k^\dagger\f$
+        as in ``propagate()``.
+
+        @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
+        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        element \f$a_{ij}\f$ corresponds to the control amplitude of the
+        \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
+        @param state \f$\left[\psi(0)\right]\f$ The initial state vector.
+        @param dt (\f$\Delta t\f$) The time step.
+        @param cost \f$(\hat O)\f$ The observable to calculate the
+        expectation value of.
+        @return The expectation value, \f$\psi^\dagger(T)\hat O\psi(T)\f$, and
+        the switching function,
+        \f$\phi_j(n\Delta t)\f$
+        for all
+        \f$j\in\left[1,\textrm{length}\right]\f$
+        and
+        \f$n\in\left[1,N\right]\f$.
+
+        Also see ``switching_function()``.
+    */
+    std::tuple<double, Eigen::Matrix<double, Dynamic, n_ctrl>>
+    gate_switching_function(DMatrix<Dynamic, n_ctrl> ctrl_amp,
+                            double dt,
+                            DMatrix<dim, dim> target) {
+        // forward propagation
+        size_t steps = ctrl_amp.rows();
+        Eigen::Array<complex<double>, dim, 1> exp_d0 = (d0*dt).exp();
+        ctrl_amp *= dt;
+        DMatrix<dim, dim> u = (DMatrix<dim, dim>)u0_inverse;
+        u = u.array().colwise() * exp_d0;
+        for (size_t j = 0; j < length; j++) {
+            u = us[j] * u;
+            u = u.array().colwise() * (ds[j]*ctrl_amp(0, j)).exp();
+        }
+        for (size_t i = 1; i < steps; i++) {
+            u = u0_inverse_u_last * u;
+            u = u.array().colwise() * exp_d0;
+            for (size_t j = 0; j < length; j++) {
+                u = us[j] * u;
+                u = u.array().colwise() * (ds[j]*ctrl_amp(i, j)).exp();
+            }
+        }
+        u = us[length] * u;
+        // Energy
+        complex<double> F = std::conj((target.adjoint()*u).trace());
+        // Back propagation
+        Eigen::Array<complex<double>, dim, 1> exp_d0_c = exp_d0.conjugate();
+        ctrl_amp *= -1;
+        DMatrix<Dynamic, n_ctrl> out = DMatrix<Dynamic, n_ctrl>::Zero(steps, length);
+        for (size_t k = steps-1; true;) {
+            for (size_t j = length-1; true;) {
+                out(k, j) = (target.adjoint()*hs[j]*u).trace();
+                u = us_inverse_individual[j] * u;
+                u = u.array().colwise() * (ds[j]*ctrl_amp(k, j)).exp();
+                u = us_individual[j] * u;
+                target = us_inverse_individual[j] * target;
+                target = target.array().colwise() * (ds[j]*ctrl_amp(k, j)).exp();
+                target = us_individual[j] * target;
+                if (j == 0) {
+                    break;
+                }
+                j--;
+            }
+            if (k == 0) {
+                break;
+            }
+            u = u0_inverse * u;
+            u = u.array().colwise() * exp_d0_c;
+            u = u0 * u;
+            target = u0_inverse * target;
+            target = target.array().colwise() * exp_d0_c;
+            target = u0 * target;
+            k--;
+        }
+        Eigen::Index d = target.rows();
+        double normalisation = 1.0/(d*(d+1));
+        return std::tuple<double, Eigen::Matrix<double, Dynamic, n_ctrl>>(1-normalisation*(std::pow(std::abs(F), 2)+d), -2*normalisation*(F*out).imag());
     };
 };
 }
