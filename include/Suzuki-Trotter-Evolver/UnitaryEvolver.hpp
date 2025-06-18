@@ -382,7 +382,7 @@ struct UnitaryEvolver {
         where
         \f$a_{nj}\coloneqq a(n\Delta t)\f$,
         we set
-        $a_{n0}=1$
+        \f$a_{n0}=1\f$
         for notational ease, and the additive error
         \f$\mathcal E\f$
         is
@@ -471,7 +471,7 @@ struct UnitaryEvolver {
         where
         \f$a_{nj}\coloneqq a(n\Delta t)\f$,
         we set
-        $a_{n0}=1$
+        \f$a_{n0}=1\f$
         for notational ease, and the addative error
         \f$\mathcal E\f$
         is
@@ -567,7 +567,7 @@ struct UnitaryEvolver {
         where
         \f$a_{nj}\coloneqq a(n\Delta t)\f$,
         we set
-        $a_{n0}=1$
+        \f$a_{n0}=1\f$
         for notational ease, and the additive error
         \f$\mathcal E\f$
         is
