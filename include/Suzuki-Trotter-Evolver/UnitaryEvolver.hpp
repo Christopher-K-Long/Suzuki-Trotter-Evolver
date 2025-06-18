@@ -64,8 +64,8 @@ struct UnitaryEvolver {
         ``UnitaryEvolver::UnitaryEvolver()``.
     */
     static const int dim_x_n_ctrl = (dim == Dynamic || n_ctrl == Dynamic)
-                       ? Dynamic
-                       : dim * n_ctrl;
+                                    ? Dynamic
+                                    : dim * n_ctrl;
     /**
         The number of control Hamiltonians
     */
