@@ -63,12 +63,13 @@ subprocess.check_call(f"cd {DIR}; {cffconvert_command} -f ris > docs/citation/ci
 subprocess.check_call(f"cd {DIR}; {cffconvert_command} -f codemeta > docs/citation/citation_files/citation_codemeta.json", shell=True)
 subprocess.check_call(f"cd {DIR}; {cffconvert_command} -f endnote > docs/citation/citation_files/citation.enw", shell=True)
 
-def configureDoxyfile(input_dir, output_dir):
+def configureDoxyfile(input_dir, output_dir, readme_path):
     with open('Doxyfile.in', 'r') as file :
         filedata = file.read()
 
     filedata = filedata.replace('@DOXYGEN_INPUT_DIR@', input_dir)
     filedata = filedata.replace('@DOXYGEN_OUTPUT_DIR@', output_dir)
+    filedata = filedata.replace('@DOXYGEN_INPUT_README@', readme_path)
 
     with open('Doxyfile', 'w') as file:
         file.write(filedata)
@@ -79,7 +80,9 @@ read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 if read_the_docs_build:
     breathe_projects = {}
     input_dir = '../include/Suzuki-Trotter-Evolver'
-    output_dir = 'build'
-    configureDoxyfile(input_dir, output_dir)
+    output_dir = '_static/doxygen'
+    readme_path = '../README.md'
+    os.makedirs(output_dir)
+    configureDoxyfile(input_dir, output_dir, readme_path)
     subprocess.call('doxygen', shell=True)
     breathe_projects['Suzuki-Trotter-Evolver'] = output_dir + '/xml'
