@@ -79,7 +79,7 @@ read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 if read_the_docs_build:
     breathe_projects = {}
     input_dir = '../include/Suzuki-Trotter-Evolver'
-    output_dir = 'build/html'
+    output_dir = '_static'
     configureDoxyfile(input_dir, output_dir)
     subprocess.call('doxygen', shell=True)
     breathe_projects['Suzuki-Trotter-Evolver'] = output_dir + '/xml'
