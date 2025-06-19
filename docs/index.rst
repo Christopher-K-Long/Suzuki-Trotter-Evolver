@@ -6,7 +6,7 @@ Suzuki-Trotter-Evolver documentation
    :start-after: # Suzuki-Trotter-Evolver
 
 This documentation was built using Doxygen and then piped into Sphinx. The
-Doxygen documentation can be found `here <../doxygen/html>`_.
+Doxygen documentation can be found `here <doxygen/html>`_.
 
 .. toctree::
     :hidden:
