@@ -1,6 +1,7 @@
 /**
-    An integrator for first-order homogeneous ordinary differential equations
-    that assumes the solution is unitary.
+    \file
+    \brief An integrator for first-order homogeneous ordinary differential equations
+    that assumes the solution is unitary and associated types and functions.
 */
 
 #include <complex>
@@ -32,8 +33,10 @@ typedef Eigen::SparseMatrix<complex<double>> SMatrix;
 /**
     Computes the gate infidelity between a gate and a target gate:
     @f[
-    \mathcal I(\texttt{gate}, \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot \texttt{gate}\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
+    \mathcal I(\texttt{gate}, \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot \texttt{gate}\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)},
     @f]
+    where \f$\texttt{dim}\f$ is the dimension of the Hilbert space the gates act
+    upon.
 
     @param gate The gate to compute the infidelity of.
     @param target The target gate to compute the infidelity with respect to.
@@ -742,9 +745,9 @@ struct UnitaryEvolver {
     DMatrix<Dynamic, 1> evolved_inner_product_all(DMatrix<Dynamic, n_ctrl> ctrl_amp,
                                                   DMatrix<dim, 1> state,
                                                   double dt,
-                                                  DMatrix<1, dim> observable) {
+                                                  DMatrix<1, dim> fixed_vector) {
         DMatrix<dim, Dynamic> phi = propagate_all(ctrl_amp, state, dt);
-        return observable*phi;
+        return fixed_vector*phi;
     };
 
     /**
@@ -973,11 +976,11 @@ struct UnitaryEvolver {
         \mathcal I(\texttt{gate}, \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot \texttt{gate}\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
         @f]
 
-        Also see ``gate_infidelity()``.
+        Also see `unitary_gate_infidelity()`.
     */
     double evolved_gate_infidelity(DMatrix<Dynamic, n_ctrl> ctrl_amp,
-                                            double dt,
-                                            DMatrix<dim, dim> target) {
+                                   double dt,
+                                   DMatrix<dim, dim> target) {
         DMatrix<dim, dim> U = get_evolution(ctrl_amp, dt);
         return unitary_gate_infidelity(U, target);
     };
