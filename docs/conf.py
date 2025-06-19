@@ -80,7 +80,7 @@ if read_the_docs_build:
     breathe_projects = {}
     input_dir = '../include/Suzuki-Trotter-Evolver'
     output_dir = '_static/doxygen'
-    os.path.mkdir(output_dir)
+    os.mkdir(output_dir)
     configureDoxyfile(input_dir, output_dir)
     subprocess.call('doxygen', shell=True)
     breathe_projects['Suzuki-Trotter-Evolver'] = output_dir + '/xml'
