@@ -329,7 +329,7 @@ struct UnitaryEvolver {
                    vector<Matrix> us,
                    vector<Matrix> us_individual,
                    vector<Matrix> us_inverse_individual,
-                   vector<Matrix> hs,
+                   vector<Matrix> control_hamiltonians,
                    Matrix u0_inverse_u_last)
         : length{l},
           d0{d0},
@@ -339,7 +339,7 @@ struct UnitaryEvolver {
           us{us},
           us_individual{us_individual},
           us_inverse_individual{us_inverse_individual},
-          hs{hs},
+          hs{control_hamiltonians},
           u0_inverse_u_last{u0_inverse_u_last}
         {};
         
