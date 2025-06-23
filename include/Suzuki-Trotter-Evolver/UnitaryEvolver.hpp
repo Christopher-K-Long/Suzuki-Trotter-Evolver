@@ -959,6 +959,7 @@ struct UnitaryEvolver {
         return u;
     };
     /**
+        
         Calculates the gate infidelity with respect to a target gate of the gate
         produced by the control Hamiltonian modulated by the control amplitudes.
         The integration is performed using
@@ -973,7 +974,7 @@ struct UnitaryEvolver {
         to.
         @return The gate infidelity with respect to the target gate:
         @f[
-        \mathcal I(\texttt{gate}, \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot \texttt{gate}\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
+        \mathcal I(U(N\Delta t), \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot U(N\Delta t)\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
         @f]
 
         Also see `unitary_gate_infidelity()`.
@@ -993,40 +994,45 @@ struct UnitaryEvolver {
         @f]
         where \f$T=N\Delta t\f$, then the switching function is
         @f[
-        \phi_j(t)\coloneqq\frac{\delta J}{\delta a_j(t)}
-            =2\operatorname{Im}\left(\psi^\dagger[\vec a(t);T]
-            \hat OU(t\to T)H_j\psi[\vec a(t);t]\right).
+        \begin{align}
+        &\phi_j(t)\coloneqq\frac{\delta J}{\delta a_j(t)}\\
+        &=\frac{2}{\texttt{dim}(\texttt{dim}+1)}\operatorname{Im}\left(\Tr\left[U^\dagger(N\Delta t)\cdot\texttt{target}\right]\Tr\left[\texttt{target}^\dagger \cdot U(t\to T)H_j U[\vec a(t);t]\right]\right).
+        \end{align}
         @f]
         Using the first-order Suzuki-Trotter expansion we can express the
         switching function as
         @f[
         \begin{align}
             &\phi_j(n\Delta t)=\frac{1}{\Delta t}\pdv{J}{a_{nj}}\\
-            &=\!2\operatorname{Im}\!\left(\psi^\dagger(T)
-                \hat O\!\!\left[\prod_{i>n}^N\prod_{k=1}^{\textrm{length}}
+            &=\!\frac{2}{\texttt{dim}(\texttt{dim}+1)}\operatorname{Im}
+                \!\left(
+                \Tr\!\left[U^\dagger(N\Delta t)\cdot\texttt{target}\right]
+                \vphantom{[\prod_{k=j}^{\textrm{length}}}\right.\\
+                &\left.\cdot\Tr\!\left[\texttt{target}^\dagger\!\cdot\!
+                \left[\prod_{i>n}^N\prod_{k=1}^{\textrm{length}}
                 e^{-ia_{ik}H_k\Delta t}\right]\!\!\!
                 \left[\prod_{k=j}^{\textrm{length}}
                 e^{-ia_{nk}H_k\Delta t}\right]\!H_j\!\!
                 \left[\prod_{k=0}^{j-1}
                 e^{-ia_{nk}H_k\Delta t}\right]
-                \!\psi(\left[n-1\right]\Delta t)\right),
+                \! U(\left[n-1\right]\Delta t)\right]\right),
         \end{align}
         @f]
         where for numerical efficiency we replace
         \f$e^{-ia_{ik}H_k\Delta t}\f$
         with
         \f$U_ke^{-ia_{ik}D_k\Delta t}U_k^\dagger\f$
-        as in ``propagate()``.
+        as in ``get_evolution()``.
 
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
         time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
-        @param state \f$\left[\psi(0)\right]\f$ The initial state vector.
         @param dt (\f$\Delta t\f$) The time step.
         @param cost \f$(\hat O)\f$ The observable to calculate the
         expectation value of.
-        @return The expectation value, \f$\psi^\dagger(T)\hat O\psi(T)\f$, and
+        @return The gate infidelity,
+        \f$I(U\left[\vec a(t); T\right], \texttt{target})\f$ and
         the switching function,
         \f$\phi_j(n\Delta t)\f$
         for all
