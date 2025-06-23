@@ -210,7 +210,8 @@ struct UnitaryEvolver {
             u0_inverse_u_last = DMatrix<dim, dim>::Identity(l, l);
             us.push_back(u0);
         } else {
-            hs.push_back((DMatrix<dim, dim>)(control_hamiltonians.block(0, 0, l, l)));
+            hs.push_back(
+                (DMatrix<dim, dim>)(control_hamiltonians.block(0, 0, l, l)));
             EigSolver eigs(hs.back());
             ds.push_back((Eigen::Array<complex<double>, dim, 1>)(
                 minus_i*eigs.eigenvalues().array()));
@@ -220,7 +221,8 @@ struct UnitaryEvolver {
             us.push_back(u.adjoint() * u0);
             us.push_back(u); // append twice
             for (size_t i = 1; i < length; i++) {
-                hs.push_back((DMatrix<dim, dim>)(control_hamiltonians.block(i*l, 0, l, l)));
+                hs.push_back((DMatrix<dim, dim>)(control_hamiltonians.block(
+                    i*l, 0, l, l)));
                 eigs = EigSolver(hs.back());
                 ds.push_back((Eigen::Array<complex<double>, dim, 1>)(
                     minus_i*eigs.eigenvalues().array()));
@@ -273,7 +275,8 @@ struct UnitaryEvolver {
             us.push_back((u.adjoint() * u0).pruned());
             us.push_back(u); // append twice
             for (size_t i = 1; i < length; i++) {
-                hs.push_back(control_hamiltonians.block(i*l, 0, l, l).sparseView());
+                hs.push_back(
+                    control_hamiltonians.block(i*l, 0, l, l).sparseView());
                 eigs = EigSolver((DMatrix<dim, dim>)(hs.back()));
                 ds.push_back((Eigen::Array<complex<double>, dim, 1>)(
                                            minus_i*eigs.eigenvalues().array()));
