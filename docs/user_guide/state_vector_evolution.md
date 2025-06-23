@@ -16,13 +16,13 @@ $$
 H(t)=H_0+\sum_{j=1}^{\textrm{length}}a_j(t)H_j.
 $$(state_vector_evolution_2)
 
-The first step we take to integrating the Schrödinger equation is approximating the Hamiltonian as constant over a period of time $\Delta t$. The error induced by this approximation can be derived as follows: First, integrate {eq}`state_vector_evolution_1`,
+The first step we take to integrating the Schrödinger equation is approximating the Hamiltonian as constant over a period of time $\Delta t$. The error induced by this approximation can be derived as follows: First, integrate Eq. {eq}`state_vector_evolution_1`,
 
 $$
 U(t)=I-i\int_0^t\textrm{d}t_1H(t_1)U(t_1).
 $$(state_vector_evolution_3)
 
-Now recursively substituting the left-hand side of {eq}`state_vector_evolution_3` into the right-hand-side we find
+Now recursively substituting the left-hand side of Eq. {eq}`state_vector_evolution_3` into the right-hand-side we find
 
 $$
 U(\Delta t)=I-i\int_0^{\Delta t}\textrm{d}t_1H(t_1)-\int_0^{\Delta t}\textrm{d}t_1\int_0^{t_1}\textrm{d}t_2H(t_1)H(t_2)+\mathcal O(\Delta t^3),
@@ -90,13 +90,13 @@ $$(state_vector_evolution_14)
 
 Note the error is quadratic in $\Delta t$ but linear in $N$. We can also view this as being linear in $\Delta t$ and linear in total evolution time $N\Delta t$. Additionally, by Nyquist's theorem this asmptotic error scaling will not be achieved until the time step $\Delta t$ is smaller than $\frac{1}{2\Omega}$ where $\Omega$ is the largest energy or frequency in the system. In our [Rabi oscillation example](getting_started.md#quick-start) $\Omega=\max\left\{v,f\right\}$.
 
-Finally, we can diagonalise each term in the Hamiltonian, $H_j=U_jD_jU_j^\dagger$ where $U_j$ is a unitary and $D_j$ is diagonal. Substituting this diagonalised form into {eq}`state_vector_evolution_9` we find
+Finally, we can diagonalise each term in the Hamiltonian, $H_j=U_jD_jU_j^\dagger$ where $U_j$ is a unitary and $D_j$ is diagonal. Substituting this diagonalised form into Eq. {eq}`state_vector_evolution_9` we find
 
 $$
 U(N\Delta t)=\prod_{n=1}^N\prod_{j=0}^{\textrm{length}}U_je^{-ia_{nj}D_j\Delta t}U_j^\dagger+\mathcal E.
 $$(state_vector_evolution_15)
 
-When we {eq}`state_vector_evolution_15` on a state vector $\psi(0)$,
+When we act Eq. {eq}`state_vector_evolution_15` on a state vector $\psi(0)$,
 
 $$
 \psi(N\Delta t)=\prod_{n=1}^N\prod_{j=0}^{\textrm{length}}U_je^{-ia_{nj}D_j\Delta t}U_j^\dagger\psi(0)+\mathcal E,
