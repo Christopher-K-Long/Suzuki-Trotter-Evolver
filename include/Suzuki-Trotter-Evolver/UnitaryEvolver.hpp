@@ -1,7 +1,8 @@
 /**
     \file
-    \brief An integrator for first-order homogeneous ordinary differential equations
-    that assumes the solution is unitary and associated types and functions.
+    \brief An integrator for first-order homogeneous ordinary differential
+    equations that assumes the solution is unitary and associated types and
+    functions.
 */
 
 #include <complex>
@@ -41,7 +42,10 @@ typedef Eigen::SparseMatrix<complex<double>> SMatrix;
 /**
     Computes the gate infidelity between a gate and a target gate:
     @f[
-    \mathcal I(\texttt{gate}, \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot \texttt{gate}\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)},
+    \mathcal I(\texttt{gate}, \texttt{target})
+    \coloneqq 1-\frac{
+    \left|\Tr\left[\texttt{target}^\dagger \cdot \texttt{gate}\right]\right|^2
+    +\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)},
     @f]
     where \f$\texttt{dim}\f$ is the dimension of the Hilbert space the gates act
     upon.
@@ -725,11 +729,11 @@ struct UnitaryEvolver {
 
         Also see ``evolved_expectation_value()``
     */
-    DMatrix<Dynamic, 1> evolved_expectation_value_all(
-                                              DMatrix<Dynamic, n_ctrl> ctrl_amp,
-                                              DMatrix<dim, 1> state,
-                                              double dt,
-                                              DMatrix<dim, dim> observable) {
+    DMatrix<Dynamic, 1>
+    evolved_expectation_value_all(DMatrix<Dynamic, n_ctrl> ctrl_amp,
+                                  DMatrix<dim, 1> state,
+                                  double dt,
+                                  DMatrix<dim, dim> observable) {
         DMatrix<dim, Dynamic> phi = propagate_all(ctrl_amp, state, dt);
         return (phi.adjoint() * observable * phi).diagonal();
     };
@@ -778,14 +782,16 @@ struct UnitaryEvolver {
         expectation value of.
         @return The inner products of the evolved state vectors with the fixed
         vector:
-        \f$\left(\sum_{i=1}^\texttt{dim}\xi_i\psi_i(n\Delta t)\right)_{n=0}^N\f$.
+        \f$\left(
+        \sum_{i=1}^\texttt{dim}\xi_i\psi_i(n\Delta t)\right)_{n=0}^N\f$.
 
         Also see ``evolved_inner_product()``.
     */
-    DMatrix<Dynamic, 1> evolved_inner_product_all(DMatrix<Dynamic, n_ctrl> ctrl_amp,
-                                                  DMatrix<dim, 1> state,
-                                                  double dt,
-                                                  DMatrix<1, dim> fixed_vector) {
+    DMatrix<Dynamic, 1>
+    evolved_inner_product_all(DMatrix<Dynamic, n_ctrl> ctrl_amp,
+                              DMatrix<dim, 1> state,
+                              double dt,
+                              DMatrix<1, dim> fixed_vector) {
         DMatrix<dim, Dynamic> phi = propagate_all(ctrl_amp, state, dt);
         return fixed_vector*phi;
     };
@@ -1014,7 +1020,10 @@ struct UnitaryEvolver {
         to.
         @return The gate infidelity with respect to the target gate:
         @f[
-        \mathcal I(U(N\Delta t), \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot U(N\Delta t)\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
+        \mathcal I(U(N\Delta t), \texttt{target})
+        \coloneqq 1-\frac{
+        \left|\Tr\left[\texttt{target}^\dagger\cdot U(N\Delta t)\right]\right|^2
+        +\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
         @f]
 
         Also see `unitary_gate_infidelity()`.
@@ -1030,13 +1039,20 @@ struct UnitaryEvolver {
         gate infidelity as the cost function. More precisely if the cost
         function is
         @f[
-        J\left[\vec a(t)\right]\coloneqq\mathcal I(U\left[\vec a(t); T\right], \texttt{target})\coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger \cdot U\left[\vec a(t); T\right]\right]\right|^2+\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
+        J\left[\vec a(t)\right]
+        \coloneqq\mathcal I(U\left[\vec a(t); T\right], \texttt{target})
+        \coloneqq 1-\frac{\left|\Tr\left[\texttt{target}^\dagger
+        \cdot U\left[\vec a(t); T\right]\right]\right|^2
+        +\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
         @f]
         where \f$T=N\Delta t\f$, then the switching function is
         @f[
         \begin{align}
         &\phi_j(t)\coloneqq\frac{\delta J}{\delta a_j(t)}\\
-        &=\frac{2}{\texttt{dim}(\texttt{dim}+1)}\operatorname{Im}\left(\Tr\left[U^\dagger(N\Delta t)\cdot\texttt{target}\right]\Tr\left[\texttt{target}^\dagger \cdot U(t\to T)H_j U[\vec a(t);t]\right]\right).
+        &=\frac{2}{\texttt{dim}(\texttt{dim}+1)}\operatorname{Im}\left(
+        \Tr\left[U^\dagger(N\Delta t)\cdot\texttt{target}\right]
+        \Tr\left[\texttt{target}^\dagger
+        \cdot U(t\to T)H_j U[\vec a(t);t]\right]\right).
         \end{align}
         @f]
         Using the first-order Suzuki-Trotter expansion we can express the
@@ -1110,15 +1126,17 @@ struct UnitaryEvolver {
         // Back propagation
         Eigen::Array<complex<double>, dim, 1> exp_d0_c = exp_d0.conjugate();
         ctrl_amp *= -1;
-        DMatrix<Dynamic, n_ctrl> out = DMatrix<Dynamic, n_ctrl>::Zero(steps, length);
+        DMatrix<Dynamic, n_ctrl> out = DMatrix<Dynamic, n_ctrl>::Zero(steps,
+                                                                      length);
         for (size_t k = steps-1; true;) {
             for (size_t j = length-1; true;) {
                 out(k, j) = (target.adjoint()*hs[j]*u).trace();
                 u = us_inverse_individual[j] * u;
-                u = u.array().colwise() * (ds[j]*ctrl_amp(k, j)).exp();
+                u = u.array().colwise() * (ds[j] * ctrl_amp(k, j)).exp();
                 u = us_individual[j] * u;
                 target = us_inverse_individual[j] * target;
-                target = target.array().colwise() * (ds[j]*ctrl_amp(k, j)).exp();
+                target = target.array().colwise()
+                         * (ds[j] * ctrl_amp(k, j)).exp();
                 target = us_individual[j] * target;
                 if (j == 0) {
                     break;
@@ -1138,7 +1156,10 @@ struct UnitaryEvolver {
         }
         Eigen::Index d = target.rows();
         double normalisation = 1.0/(d*(d+1));
-        return std::tuple<double, Eigen::Matrix<double, Dynamic, n_ctrl>>(1-normalisation*(std::pow(std::abs(F), 2)+d), -2*normalisation*(F*out).imag());
+        return std::tuple<double, Eigen::Matrix<double, Dynamic, n_ctrl>>(
+            1-normalisation*(std::pow(std::abs(F), 2)+d),
+            -2*normalisation*(F*out).imag()
+        );
     };
 };
 }
