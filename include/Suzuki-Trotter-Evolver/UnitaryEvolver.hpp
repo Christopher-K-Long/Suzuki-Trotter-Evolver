@@ -14,18 +14,26 @@ using Eigen::Dynamic;
 using std::pow;
 using std::conj;
 
+/**
+    A C++ header-only library for evolving states under the Schrödinger equation
+    using first-order Suzuki-Trotter and computing switching functions.
+ */
 namespace Suzuki_Trotter_Evolver {
 
 /**
     A dense `n`x`m` matrix of complex doubles.
     @tparam n The number of rows.
     @tparam m The number of columns.
+
+    Also see \ref SMatrix.
 */
 template<int n = Dynamic, int m = Dynamic> using DMatrix =
     Eigen::Matrix<complex<double>, n, m>;
 
 /**
     A sparse matrix of complex doubles.
+
+    Also see \ref DMatrix.
 */
 typedef Eigen::SparseMatrix<complex<double>> SMatrix;
 
@@ -86,6 +94,8 @@ struct UnitaryEvolver {
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
         \f$i\in\left[\texttt{length}\right]\f$.
+
+        Also see \ref ds, \ref u0, and \ref u0_inverse.
     */
     vector<Eigen::Array<complex<double>, dim, 1>> ds;
 
@@ -94,6 +104,9 @@ struct UnitaryEvolver {
         \f$U_0\f$,
         that diagonalises the drift Hamiltonian:
         \f$H_0=U_0D_0U_0^\dagger\f$.
+
+        Also see \ref d0, \ref us_individual, \ref us_inverse_individual, and
+        \ref hs.
     */
     Matrix u0;
 
@@ -102,6 +115,8 @@ struct UnitaryEvolver {
         \f$U_0^\dagger\f$,
         that diagonalises the drift Hamiltonian:
         \f$H_0=U_0D_0U_0^\dagger\f$.
+
+        Also see \ref us_individual, \ref d0, and \ref u0_inverse.
     */
     Matrix u0_inverse;
 
@@ -112,6 +127,8 @@ struct UnitaryEvolver {
         \f$H_{i-1}\f$
         to the eigen basis of
         \f$H_i\f$.
+
+        Also see \ref us_inverse_individual, \ref u0, and \ref d0.
     */
     vector<Matrix> us;
 
@@ -122,6 +139,8 @@ struct UnitaryEvolver {
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
         \f$i\in\left[\texttt{length}\right]\f$.
+
+        Also see \ref us_individual, and \ref us_inverse_individual.
     */
     vector<Matrix> us_individual;
 
@@ -132,6 +151,8 @@ struct UnitaryEvolver {
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
         \f$i\in\left[\texttt{length}\right]\f$.
+
+        Also see \ref us_inverse_individual, \ref us, \ref ds, and \ref hs.
     */
     vector<Matrix> us_inverse_individual;
 
@@ -140,6 +161,8 @@ struct UnitaryEvolver {
         \f$H_i\f$
         for all
         \f$i\in\left[\texttt{length}\right]\f$.
+
+        Also see \ref us_individual, \ref us, \ref ds, and \ref hs.
     */
     vector<Matrix> hs;
 
@@ -150,6 +173,8 @@ struct UnitaryEvolver {
         \f$H_{\texttt{length}}\f$
         to the eigen basis of
         \f$H_0\f$.
+
+        Also see \ref us_individual, \ref us_inverse_individual, and \ref ds.
     */
     Matrix u0_inverse_u_last;
     
@@ -164,6 +189,8 @@ struct UnitaryEvolver {
 
         @param drift_hamiltonian The drift Hamiltonian.
         @param control_hamiltonians The control Hamiltonians.
+
+        Also see \ref us_individual, \ref us, and \ref u0_inverse.
     */
     template<typename T = Matrix>
     UnitaryEvolver(std::enable_if_t<std::is_same<T, DMatrix<dim, dim>>::value,
@@ -264,62 +291,62 @@ struct UnitaryEvolver {
         Initialises a new unitary evolver using the struct attributes.
 
         @param l The number of control Hamiltonians. Initialises
-        ``UnitaryEvolver::length``.
+        \ref length.
         @param d0 The eigenvalues,
         \f$\operatorname{diag}(D_0)\f$,
         of the drift Hamiltonian:
         \f$H_0=U_0D_0U_0^\dagger\f$.
-        Initialises ``UnitaryEvolver::d0``.
+        Initialises \ref d0.
         @param ds The eigenvalues,
         \f$\left(\operatorname{diag}(D_i)\right)_{i=1}^{\texttt{length}}\f$,
         of the control Hamiltonians:
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
         \f$i\in\left[\texttt{length}\right]\f$.
-        Initialises ``UnitaryEvolver::ds``.
+        Initialises \ref ds.
         @param u0 The unitary transformation,
         \f$U_0\f$,
         that diagonalises the drift Hamiltonian:
         \f$H_0=U_0D_0U_0^\dagger\f$.
-        Initialises ``UnitaryEvolver::u0``.
+        Initialises \ref u0.
         @param u0_inverse The inverse of the unitary transformation,
         \f$U_0^\dagger\f$,
         that diagonalises the drift Hamiltonian:
         \f$H_0=U_0D_0U_0^\dagger\f$.
-        Initialises ``UnitaryEvolver::u0_inverse``.
+        Initialises \ref u0_inverse.
         @param us The unitary transformations,
         \f$(U_i^\dagger U_{i-1})_{i=1}^{\texttt{length}}\f$,
         from the eigen basis of
         \f$H_{i-1}\f$
         to the eigen basis of
         \f$H_i\f$.
-        Initialises ``UnitaryEvolver::us``.
+        Initialises \ref us.
         @param us_individual The unitary transformations,
         \f$\left(U_i\right)_{i=1}^{\texttt{length}}\f$,
         that diagonalise the control Hamiltonians:
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
         \f$i\in\left[\texttt{length}\right]\f$.
-        Initialises ``UnitaryEvolver::us_individual``.
+        Initialises \ref us_individual.
         @param us_inverse_individual The inverse of the unitary transformations,
         \f$(U_i^\dagger)_{i=1}^{\texttt{length}}\f$,
         that diagonalise the control Hamiltonians:
         \f$H_i=U_iD_iU_i^\dagger\f$
         for all
         \f$i\in\left[\texttt{length}\right]\f$.
-        Initialises ``UnitaryEvolver::us_inverse_individual``.
+        Initialises \ref us_inverse_individual.
         @param control_hamiltonians The control Hamiltonians:
         \f$H_i\f$
         for all
         \f$i\in\left[\texttt{length}\right]\f$.
-        Initialises ``UnitaryEvolver::hs``.
+        Initialises \ref hs.
         @param u0_inverse_u_last The unitary transformation,
         \f$U_0^\dagger U_{\texttt{length}}\f$,
         from the eigen basis of
         \f$H_{\texttt{length}}\f$
         to the eigen basis of
         \f$H_0\f$.
-        Initialises ``UnitaryEvolver::u0_inverse_u_last``.
+        Initialises \ref u0_inverse_u_last.
     */
     UnitaryEvolver(size_t l,
                    Eigen::Array<complex<double>, dim, 1> d0,
@@ -405,6 +432,8 @@ struct UnitaryEvolver {
         @param dt (\f$\Delta t\f$) The time step to propagate by.
         @return The propagated state vector:
         \f$\psi(N\Delta t)\f$.
+
+        Also see ``propagate_collection()`` and ``propagate_all()``.
     */
     DMatrix<dim, 1> propagate(DMatrix<Dynamic, n_ctrl> ctrl_amp,
                               DMatrix<dim, 1> state,
@@ -497,6 +526,8 @@ struct UnitaryEvolver {
         @param dt (\f$\Delta t\f$) The time step to propagate by.
         @return The propagated state vectors:
         \f$\left(\psi_k(N\Delta t)\right)_k\f$.
+
+        Also see ``propagate()`` and ``propagate_all()``.
     */
     template<int l = Dynamic>
     DMatrix<dim, l> propagate_collection(DMatrix<Dynamic, n_ctrl> ctrl_amp,
@@ -590,6 +621,8 @@ struct UnitaryEvolver {
         @param dt (\f$\Delta t\f$) The time step to propagate by.
         @return The propagated state vector at each time step:
         \f$\left(\psi(n\Delta t)\right)_{n=0}^N\f$.
+
+        Also see ``propagate()`` and ``propagate_collection()``.
     */
     DMatrix<dim, Dynamic> propagate_all(DMatrix<Dynamic, n_ctrl> ctrl_amp,
                                         DMatrix<dim, 1> state,
@@ -637,6 +670,8 @@ struct UnitaryEvolver {
         @return The expectation value of the observable:
         \f$\langle\hat O\rangle
             \equiv\psi^\dagger(N\Delta t)\hat O\psi(N\Delta t)\f$.
+
+        Also see ``evolved_expectation_value_all()``
     */
     complex<double> evolved_expectation_value(DMatrix<Dynamic, n_ctrl> ctrl_amp,
                                               DMatrix<dim, 1> state,
@@ -662,6 +697,8 @@ struct UnitaryEvolver {
         expectation value of.
         @return The expectation value of the observable:
         \f$\left(\psi^\dagger(n\Delta t)\hat O\psi(N\Delta t)\right)_{n=0}^N\f$.
+
+        Also see ``evolved_expectation_value()``
     */
     DMatrix<Dynamic, 1> evolved_expectation_value_all(
                                               DMatrix<Dynamic, n_ctrl> ctrl_amp,
