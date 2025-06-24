@@ -406,7 +406,8 @@ struct UnitaryEvolver {
             \norm{[H_j,H_k]}\right]
             \right)\\
         &=\mathcal O\left(
-            N\Delta t^2\texttt{length}\left[\omega E+\alpha^2+E^2\right]
+            N\Delta t^2\cdot\texttt{length}
+            \left[\omega E+\alpha^2E^2\cdot\texttt{length}\right]
             \right)
         \end{align}
         @f]
@@ -497,7 +498,8 @@ struct UnitaryEvolver {
             \norm{[H_j,H_k]}\right]
             \right)\\
         &=\mathcal O\left(
-            N\Delta t^2\texttt{length}\left[\omega E+\alpha^2+E^2\right]
+            N\Delta t^2\cdot\texttt{length}
+            \left[\omega E+\alpha^2E^2\cdot\texttt{length}\right]
             \right)
         \end{align}
         @f]
@@ -595,7 +597,8 @@ struct UnitaryEvolver {
             \norm{[H_j,H_k]}\right]
             \right)\\
         &=\mathcal O\left(
-            N\Delta t^2\texttt{length}\left[\omega E+\alpha^2+E^2\right]
+            N\Delta t^2\cdot\texttt{length}
+            \left[\omega E+\alpha^2E^2\cdot\texttt{length}\right]
             \right)
         \end{align}
         @f]
