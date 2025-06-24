@@ -1,6 +1,6 @@
-# State Vector Evolution
+# State Vector and Unitary Evolution
 
-We saw in [Quick Start](getting_started.md#quick-start) how we could implement a simulation of a Rabi Oscillation. Here we will first break down the error in the simulation and how to control this error before moving onto other ways we can propagate state vectors.
+We saw in [Quick Start](getting_started.md#quick-start) how we could implement a simulation of a Rabi Oscillation. Here we will first break down the error in the simulation and how to control this error before moving onto other ways we can propagate state vectors and unitaries.
 
 ## Integration method and errors
 
@@ -109,7 +109,8 @@ we can see how the acceleration is achieved by diagonalising the Hamiltonians. T
 | Property               | Scaling                                                                               |
 | ---------------------- | ------------------------------------------------------------------------------------- |
 | Initialisation runtime | $O(\textrm{length}\times\dim^3)$                                                      |
-| Integrator runtime     | $O(N\times\textrm{length}\times\dim^2)$                                               |
+| State vector integrator runtime     | $O(N\times\textrm{length}\times\dim^2)$                                               |
+| Unitary integrator runtime     | $O(N\times\textrm{length}\times\dim^3)$                                               |
 | Integrator error       | $\mathcal O\left(N\Delta t^2\textrm{length}\left[\omega E+\alpha^2+E^2\right]\right)$ |
 
 ## Other propagation methods
@@ -146,6 +147,8 @@ MatrixXcd output_states = evolver.propagate_collection(ctrl_amp,
                                                        initial_states,
                                                        dt);
 ```
+
+Finally, by passing the identity matrix to [``propagate_collection()``](../reference/structSuzuki__Trotter__Evolver_1_1UnitaryEvolver.rst#_CPPv4I_iEN22Suzuki_Trotter_Evolver14UnitaryEvolver20propagate_collectionE7DMatrixI3dim1lE7DMatrixI7Dynamic6n_ctrlE7DMatrixI3dim1lEd) as `states` we can compute the unitary evolution $U(N\Delta t)$. However, a more efficient method is to utilise [``get_evolution()``](../reference/structSuzuki__Trotter__Evolver_1_1UnitaryEvolver.rst#_CPPv4I_iEN22Suzuki_Trotter_Evolver14UnitaryEvolver20propagate_collectionE7DMatrixI3dim1lE7DMatrixI7Dynamic6n_ctrlE7DMatrixI3dim1lEd).
 
 ---
 [Previous](getting_started.md) | [Next](switching_function.md)
