@@ -24,9 +24,9 @@ $$(switching_function_3)
 
 $$
 =\!2\operatorname{Im}\!\left(\psi^\dagger(T)
-\hat O\!\!\left[\prod_{i>n}^N\prod_{k=1}^{\textrm{length}}
+\hat O\!\!\left[\prod_{i>n}^N\prod_{k=1}^{\texttt{length}}
 e^{-ia_{ik}H_k\Delta t}\right]\!\!\!
-\left[\prod_{k=j}^{\textrm{length}}
+\left[\prod_{k=j}^{\texttt{length}}
 e^{-ia_{nk}H_k\Delta t}\right]\!H_j\!\!
 \left[\prod_{k=0}^{j-1}
 e^{-ia_{nk}H_k\Delta t}\right]
@@ -74,7 +74,7 @@ Switching function:
   (-1.5637,0)  (-1.33197,0)
 ```
 
-The switching function output is a tuple. The first entry is the cost function (expectation value). Note we can compute the expectation value alone using [``evolved_expectation_value()``](../reference/structSuzuki__Trotter__Evolver_1_1UnitaryEvolver.rst#_CPPv4N22Suzuki_Trotter_Evolver14UnitaryEvolver25evolved_expectation_valueE7DMatrixI7Dynamic6n_ctrlE7DMatrixI3dimXL1EEEd7DMatrixI3dim3dimE). The second entry in the tuple is the switching function itself as a $\textrm{length}\times N$ matrix.
+The switching function output is a tuple. The first entry is the cost function (expectation value). Note we can compute the expectation value alone using [``evolved_expectation_value()``](../reference/structSuzuki__Trotter__Evolver_1_1UnitaryEvolver.rst#_CPPv4N22Suzuki_Trotter_Evolver14UnitaryEvolver25evolved_expectation_valueE7DMatrixI7Dynamic6n_ctrlE7DMatrixI3dimXL1EEEd7DMatrixI3dim3dimE). The second entry in the tuple is the switching function itself as a $\texttt{length}\times N$ matrix.
 
 ---
 [Previous](state_vector_evolution.md) | [Next](examples.md)

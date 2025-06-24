@@ -13,7 +13,7 @@ $$(state_vector_evolution_1)
 with Hamiltonians of the form
 
 $$
-H(t)=H_0+\sum_{j=1}^{\textrm{length}}a_j(t)H_j.
+H(t)=H_0+\sum_{j=1}^{\texttt{length}}a_j(t)H_j.
 $$(state_vector_evolution_2)
 
 The first step we take to integrating the Schrödinger equation is approximating the Hamiltonian as constant over a period of time $\Delta t$. The error induced by this approximation can be derived as follows: First, integrate Eq. {eq}`state_vector_evolution_1`,
@@ -49,7 +49,7 @@ $$(state_vector_evolution_7)
 Next we use the first-order Suzuki-Trotter expansion to expand each exponential:[^1]
 
 $$
-e^{-iH(n\Delta t)\Delta t}=\prod_{j=0}^{\textrm{length}}e^{-ia_{nj}H_j\Delta t}+\mathcal O\left(\Delta t^2\sum_{j,k=0}^{\textrm{length}}a_{nj}a_{nk}\left\lvert\left\lvert\left[H_j,H_k\right]\right\rvert\right\rvert\right)
+e^{-iH(n\Delta t)\Delta t}=\prod_{j=0}^{\texttt{length}}e^{-ia_{nj}H_j\Delta t}+\mathcal O\left(\Delta t^2\sum_{j,k=0}^{\texttt{length}}a_{nj}a_{nk}\left\lvert\left\lvert\left[H_j,H_k\right]\right\rvert\right\rvert\right)
 $$(state_vector_evolution_8)
 
 where $a_{nj}=a_j(n\Delta t)$ and for notational ease we set $a_{n0}=1$.
@@ -57,35 +57,35 @@ where $a_{nj}=a_j(n\Delta t)$ and for notational ease we set $a_{n0}=1$.
 Combining these results we find:
 
 $$
-U(N\Delta t)=\prod_{i=1}^N\prod_{j=0}^{\textrm{length}}e^{-ia_{ij}H_j\Delta t}+\mathcal E
+U(N\Delta t)=\prod_{i=1}^N\prod_{j=0}^{\texttt{length}}e^{-ia_{ij}H_j\Delta t}+\mathcal E
 $$(state_vector_evolution_9)
 
 where
 
 $$
 \mathcal E=\mathcal O\left(
-    \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\textrm{length}}\dot a_{ij}\left\lvert\left\lvert H_j\right\rvert\right\rvert+\sum_{i=1}^N\sum_{j,k=0}^{\textrm{length}}a_{ij}a_{ik}\left\lvert\left\lvert[H_j,H_k]\right\rvert\right\rvert\right]
+    \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\texttt{length}}\dot a_{ij}\left\lvert\left\lvert H_j\right\rvert\right\rvert+\sum_{i=1}^N\sum_{j,k=0}^{\texttt{length}}a_{ij}a_{ik}\left\lvert\left\lvert[H_j,H_k]\right\rvert\right\rvert\right]
     \right),
 $$(state_vector_evolution_10)
 
 and $\dot a_{nj}\coloneqq\dot a_j(n\Delta t)$. By making the following definitions
 
 $$
-\omega\coloneqq\max_{\substack{i\in\left[1,N\right]\\j\in\left[1,\textrm{length}\right]}}\left|\dot a_{ij}\right|,
+\omega\coloneqq\max_{\substack{i\in\left[1,N\right]\\j\in\left[1,\texttt{length}\right]}}\left|\dot a_{ij}\right|,
 $$(state_vector_evolution_11)
 
 $$
-\alpha\coloneqq\max_{\substack{i\in\left[1,N\right]\\j\in\left[0,\textrm{length}\right]}}\left|a_{ij}\right|,
+\alpha\coloneqq\max_{\substack{i\in\left[1,N\right]\\j\in\left[0,\texttt{length}\right]}}\left|a_{ij}\right|,
 $$(state_vector_evolution_12)
 
 $$
-E\coloneqq\max_{j\in\left[0,\textrm{length}\right]}\left\lvert\left\lvert H_j\right\rvert\right\rvert,
+E\coloneqq\max_{j\in\left[0,\texttt{length}\right]}\left\lvert\left\lvert H_j\right\rvert\right\rvert,
 $$(state_vector_evolution_13)
 
 we can simplify the error term to
 
 $$
-\mathcal E=\mathcal O\left(N\Delta t^2\textrm{length}\left[\omega E+\alpha^2+E^2\right]\right).
+\mathcal E=\mathcal O\left(N\Delta t^2\cdot\texttt{length}\left[\omega E+\alpha^2E^2\cdot \texttt{length}\right]\right).
 $$(state_vector_evolution_14)
 
 Note the error is quadratic in $\Delta t$ but linear in $N$. We can also view this as being linear in $\Delta t$ and linear in total evolution time $N\Delta t$. Additionally, by Nyquist's theorem this asymptotic error scaling will not be achieved until the time step $\Delta t$ is smaller than $\frac{1}{2\Omega}$ where $\Omega$ is the largest energy or frequency in the system. In our [Rabi oscillation example](getting_started.md#quick-start) $\Omega=\max\left\{v,f\right\}$.
@@ -93,13 +93,13 @@ Note the error is quadratic in $\Delta t$ but linear in $N$. We can also view th
 Finally, we can diagonalise each term in the Hamiltonian, $H_j=U_jD_jU_j^\dagger$ where $U_j$ is a unitary and $D_j$ is diagonal. Substituting this diagonalised form into Eq. {eq}`state_vector_evolution_9` we find
 
 $$
-U(N\Delta t)=\prod_{n=1}^N\prod_{j=0}^{\textrm{length}}U_je^{-ia_{nj}D_j\Delta t}U_j^\dagger+\mathcal E.
+U(N\Delta t)=\prod_{n=1}^N\prod_{j=0}^{\texttt{length}}U_je^{-ia_{nj}D_j\Delta t}U_j^\dagger+\mathcal E.
 $$(state_vector_evolution_15)
 
 When we act Eq. {eq}`state_vector_evolution_15` on a state vector $\psi(0)$,
 
 $$
-\psi(N\Delta t)=\prod_{n=1}^N\prod_{j=0}^{\textrm{length}}U_je^{-ia_{nj}D_j\Delta t}U_j^\dagger\psi(0)+\mathcal E,
+\psi(N\Delta t)=\prod_{n=1}^N\prod_{j=0}^{\texttt{length}}U_je^{-ia_{nj}D_j\Delta t}U_j^\dagger\psi(0)+\mathcal E,
 $$(state_vector_evolution_16)
 
 we can see how the acceleration is achieved by diagonalising the Hamiltonians. The matrix exponential $e^{-ia_{nj}H_j\Delta t}$ takes $O(\dim^3)$ time where $\dim$ is the dimension of the vector space acted upon by the Hamiltonians. Whereas, exponentiating the diagonal matrix $-ia_{nj}D_j\Delta t$ takes $O(\dim)$ time. The runtime is now dominated by the $O(\dim^2)$ matrix vector multiplications.
@@ -108,10 +108,10 @@ we can see how the acceleration is achieved by diagonalising the Hamiltonians. T
 
 | Property               | Scaling                                                                               |
 | ---------------------- | ------------------------------------------------------------------------------------- |
-| Initialisation runtime | $O(\textrm{length}\times\dim^3)$                                                      |
-| State vector integrator runtime     | $O(N\times\textrm{length}\times\dim^2)$                                               |
-| Unitary integrator runtime     | $O(N\times\textrm{length}\times\dim^3)$                                               |
-| Integrator error       | $\mathcal O\left(N\Delta t^2\textrm{length}\left[\omega E+\alpha^2+E^2\right]\right)$ |
+| Initialisation runtime | $O(\texttt{length}\times\dim^3)$                                                      |
+| State vector integrator runtime     | $O(N\times\texttt{length}\times\dim^2)$                                               |
+| Unitary integrator runtime     | $O(N\times\texttt{length}\times\dim^3)$                                               |
+| Integrator error       | $\mathcal O\left(N\Delta t^2\cdot\texttt{length}\left[\omega E+\alpha^2E^2\cdot\texttt{length}\right]\right)$ |
 
 ## Other propagation methods
 
