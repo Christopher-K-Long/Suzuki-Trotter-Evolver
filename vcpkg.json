@@ -1,6 +1,6 @@
 {
   "name": "suzuki-trotter-evolver",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "dependencies": [
     {
       "name": "catch2",

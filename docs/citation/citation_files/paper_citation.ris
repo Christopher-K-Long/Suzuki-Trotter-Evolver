@@ -1,16 +1,22 @@
-TY  - MISC
-AU  - Long, Christopher K
-AU  - Mayhall, Nicholas J
-AU  - Economou, Sophia E
+TY  - JOUR
+AU  - Long, Christopher K.
+AU  - Mayhall, Nicholas J.
+AU  - Economou, Sophia E.
 AU  - Barnes, Edwin
-AU  - Barnes, Crispin H W
+AU  - Barnes, Crispin H. W.
 AU  - Martins, Frederico
-AU  - Arvidsson-Shukur, David R M
+AU  - Arvidsson-Shukur, David R. M.
 AU  - Mertig, Normann
-TI  - Minimal evolution times for fast, pulse-based state preparation in silicon
-      spin qubits
-T2  - arXiv [quant-ph]
-PY  - 2024
-DA  - 2024
-UR  - http://arxiv.org/abs/2406.10913
+PY  - 2025
+DA  - 2025/07/05
+TI  - Minimal state-preparation times for silicon spin qubits
+JO  - npj Quantum Information
+SP  - 113
+VL  - 11
+IS  - 1
+AB  - Efficient preparation of quantum states on noisy intermediate-scale quantum processors remains a significant challenge to achieve quantum advantage. While gate-based methods have been the traditional approach, pulse-based algorithms offer promising alternatives with finer control and potentially reduced overheads. Here, we leverage the concept of minimum evolution time (MET) as a fundamental metric for evaluating and benchmarking quantum-state-preparation efficiency. Using numerical modeling, we investigate METs achievable through optimized microwave and exchange pulse sequences on silicon quantum hardware. We focus our investigations on molecular ground states and arbitrary state transitions. Our results demonstrate remarkably low METs: 2.3 ns for H2, 4.6 ns for HeH+, and 27 ns for LiH. METs consistently remain below 50 ns for arbitrary four-qubit state transitions, outperforming gate-based methods. We perform further analyses, revealing the impact of silicon device parameters on MET performance. Notably, increasing the maximal exchange amplitude from 10 MHz to 1 GHz significantly reduces METs, while higher maximal microwave drive amplitudes lead to faster state transitions. These findings surpass results reported for other quantum architectures. Our numerical analysis also demonstrates reasonable robustness of pulse-based state preparation to device imperfections and leakage. Our study contributes to developing efficient quantum-simulation techniques and provides insights into the strengths of silicon quantum hardware.
+SN  - 2056-6387
+UR  - https://doi.org/10.1038/s41534-025-01027-8
+DO  - 10.1038/s41534-025-01027-8
+ID  - Long2025
 ER  - 

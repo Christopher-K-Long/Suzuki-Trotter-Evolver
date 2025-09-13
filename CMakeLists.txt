@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15...4.0)
-project(Suzuki-Trotter-Evolver VERSION 1.0.0
+project(Suzuki-Trotter-Evolver VERSION 1.1.0
                                DESCRIPTION
                                    "A C++ header-only library for evolving states under the Schrödinger equation using first-order Suzuki-Trotter and computing switching functions."
                                HOMEPAGE_URL "https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver"

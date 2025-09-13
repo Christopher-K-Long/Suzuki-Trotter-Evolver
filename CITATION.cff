@@ -3,10 +3,9 @@ title: Suzuki-Trotter-Evolver
 message: >-
   If you use Suzuki-Trotter-Evolver please cite the accompanying paper:
 
-    Long, C. K., Mayhall, N. J., Economou, S. E., Barnes, E., Barnes, C. H. W.,
-    Martins, F., … Mertig, N. (2024). Minimal evolution times for fast,
-    pulse-based state preparation in silicon spin qubits. arXiv [Quant-Ph].
-    Retrieved from http://arxiv.org/abs/2406.10913
+    Long, C.K., Mayhall, N.J., Economou, S.E. et al. Minimal state-preparation
+    times for silicon spin qubits. npj Quantum Inf 11, 113 (2025).
+    https://doi.org/10.1038/s41534-025-01027-8
 
   Additionally, you can reference this code base using this CFF file.
 type: software
@@ -40,5 +39,5 @@ keywords:
   - unitary
   - quantum
 license: Apache-2.0
-version: 1.0.0
-date-released: '2025-06-13'
+version: 1.1.0
+date-released: '2025-09-13'
