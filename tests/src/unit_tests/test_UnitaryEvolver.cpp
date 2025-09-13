@@ -760,10 +760,10 @@ TEST_CASE("evolved_inner_product_all",
     for (size_t k = 0; k < 2500; k++) {
         ctrl_amp(k, 0) = omega*std::cos(2*k*dt); // Resonant drive
     }
-    Matrix inner_product = evolver.evolved_inner_product_all(ctrl_amp,
-                                                             initial_state,
-                                                             dt,
-                                                             fixed_vector);
+    Matrix inner_products = evolver.evolved_inner_product_all(ctrl_amp,
+                                                              initial_state,
+                                                              dt,
+                                                              fixed_vector);
     
     Matrix state = evolver.propagate_all(ctrl_amp, initial_state, dt);
     Matrix target_inner_products(2501, 1);
@@ -771,7 +771,7 @@ TEST_CASE("evolved_inner_product_all",
         target_inner_products(k, 0) = (fixed_vector * state.col(k))(0, 0);
     }
 
-    REQUIRE(inner_product.isApprox(target_inner_products));
+    REQUIRE(inner_products.isApprox(target_inner_products));
 }
 
 // Test Switching Function

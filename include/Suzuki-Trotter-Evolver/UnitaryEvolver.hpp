@@ -754,7 +754,7 @@ struct UnitaryEvolver {
         @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
         @param dt (\f$\Delta t\f$) The time step to propagate by.
         @param fixed_vector \f$(\xi)\f$ The fixed vector to calculate the
-        expectation value of.
+        inner product with.
         @return The inner product of the evolved state vector with the fixed
         vector:
         \f$\sum_{i=1}^\texttt{dim}\xi_i\psi_i(N\Delta t)\f$.
@@ -782,7 +782,7 @@ struct UnitaryEvolver {
         @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
         @param dt (\f$\Delta t\f$) The time step to propagate by.
         @param fixed_vector \f$(\xi)\f$ The fixed vector to calculate the
-        expectation value of.
+        inner product with.
         @return The inner products of the evolved state vectors with the fixed
         vector:
         \f$\left(
@@ -1008,7 +1008,6 @@ struct UnitaryEvolver {
         return u;
     };
     /**
-        
         Calculates the gate infidelity with respect to a target gate of the gate
         produced by the control Hamiltonian modulated by the control amplitudes.
         The integration is performed using
@@ -1029,7 +1028,7 @@ struct UnitaryEvolver {
         +\texttt{dim}}{\texttt{dim}(\texttt{dim}+1)}.
         @f]
 
-        Also see `unitary_gate_infidelity()`.
+        Also see ``unitary_gate_infidelity()``.
     */
     double evolved_gate_infidelity(DMatrix<Dynamic, n_ctrl> ctrl_amp,
                                    double dt,
@@ -1088,8 +1087,8 @@ struct UnitaryEvolver {
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param dt (\f$\Delta t\f$) The time step.
-        @param cost \f$(\hat O)\f$ The observable to calculate the
-        expectation value of.
+        @param target The target gate to calculate the infidelity with respect
+        to.
         @return The gate infidelity,
         \f$I(U\left[\vec a(t); T\right], \texttt{target})\f$ and
         the switching function,
