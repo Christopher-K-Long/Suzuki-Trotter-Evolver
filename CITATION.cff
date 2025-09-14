@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 title: Suzuki-Trotter-Evolver
 message: >-
-  If you use Suzuki-Trotter-Evolver please cite the accompanying paper:
+  If you use Suzuki-Trotter-Evolver, please cite the accompanying paper:
 
     Long, C.K., Mayhall, N.J., Economou, S.E. et al. Minimal state-preparation
     times for silicon spin qubits. npj Quantum Inf 11, 113 (2025).
