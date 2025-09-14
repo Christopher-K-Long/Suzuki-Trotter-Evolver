@@ -41,7 +41,7 @@ keywords:
 identifiers:
   - description: Archives of each released version
     type: doi
-    value: "10.5281/zenodo.17116352"
+    value: "10.5281/zenodo.17116329"
 license: Apache-2.0
 version: 1.1.0
 date-released: '2025-09-13'

@@ -2,7 +2,7 @@
 
 A C++ header-only library for evolving states under the Schrödinger equation using first-order Suzuki-Trotter and computing switching functions.
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17116352.svg)](https://doi.org/10.5281/zenodo.17116352)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17116329.svg)](https://doi.org/10.5281/zenodo.17116329)
 
 [![Build and Test Ubuntu-latest](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/ubuntu_latest.yml/badge.svg)](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/ubuntu_latest.yml) [![Build and Test macOS-latest](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/macos-latest.yml/badge.svg)](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/macos-latest.yml) [![Build and Test Windows-latest](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/windows-latest.yml/badge.svg)](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/windows-latest.yml)
 
