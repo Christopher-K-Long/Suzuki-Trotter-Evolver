@@ -51,7 +51,7 @@ Documentation including worked examples can be found at: [https://Suzuki-Trotter
 
 Source code can be found at: [https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver)
 
-A mirror can be found at: [https://gitlab.com/QuGrad-Packages/Suzuki-Trotter-Evolver](https://gitlab.com/QuGrad-Packages/Suzuki-Trotter-Evolver)
+A mirror can be found at: [https://gitlab.com/Christopher-K-Long/Suzuki-Trotter-Evolver](https://gitlab.com/Christopher-K-Long/Suzuki-Trotter-Evolver)
 
 Please submit all [pull requests](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/pulls), [issues](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/issues), [discussions](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/discussions), and [vulnerability reports](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/security) to the [GitHub](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver) repository.
 
