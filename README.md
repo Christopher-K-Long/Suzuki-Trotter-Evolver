@@ -2,7 +2,7 @@
 
 A C++ header-only library for evolving states under the Schrödinger equation using first-order Suzuki-Trotter and computing switching functions.
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17116329.svg)](https://doi.org/10.5281/zenodo.17116329)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17116329.svg)](https://doi.org/10.5281/zenodo.17116329) [![SWH](https://archive.softwareheritage.org/badge/origin/https://doi.org/10.5281/zenodo.17116329/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://doi.org/10.5281/zenodo.17116329)
 
 [![Build and Test Ubuntu-latest](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/ubuntu_latest.yml/badge.svg)](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/ubuntu_latest.yml) [![Build and Test macOS-latest](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/macos-latest.yml/badge.svg)](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/macos-latest.yml) [![Build and Test Windows-latest](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/windows-latest.yml/badge.svg)](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/actions/workflows/windows-latest.yml)
 
@@ -45,7 +45,7 @@ Runs on Linux, macOS, and Windows. Requires:
 
 ## Documentation
 
-Documentation including worked examples can be found at: [https://Suzuki-Trotter-Evolver.readthedocs.io](https://Suzuki-Trotter-Evolver.readthedocs.io)
+Documentation, including worked examples, can be found at: [https://Suzuki-Trotter-Evolver.readthedocs.io](https://Suzuki-Trotter-Evolver.readthedocs.io)
 
 ## Source Code
 
@@ -54,6 +54,8 @@ Source code can be found at: [https://github.com/Christopher-K-Long/Suzuki-Trott
 A mirror can be found at: [https://gitlab.com/Christopher-K-Long/Suzuki-Trotter-Evolver](https://gitlab.com/Christopher-K-Long/Suzuki-Trotter-Evolver)
 
 Please submit all [pull requests](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/pulls), [issues](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/issues), [discussions](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/discussions), and [vulnerability reports](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver/security) to the [GitHub](https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver) repository.
+
+Releases from this repository are assigned DOIs and  can be found at [https://doi.org/10.5281/zenodo.17116329](https://doi.org/10.5281/zenodo.17116329). The DOI for all releases is [10.5281/zenodo.17116329](https://doi.org/10.5281/zenodo.17116329). Additionally, the releases are archived to [https://archive.softwareheritage.org/swh:1:dir:364f1095abecf6ebf480fbccacfe23f0a10dce63](https://archive.softwareheritage.org/swh:1:dir:364f1095abecf6ebf480fbccacfe23f0a10dce63).
 
 ## Version and Changes
 
