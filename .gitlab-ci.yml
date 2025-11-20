@@ -1,8 +1,6 @@
 # .gitlab-ci.yml
 
 variables:
-  # Change this URL to your source GitHub repository.
-  GITHUB_REPO_URL: "https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver.git"
   GIT_STRATEGY: none
 
 sync_from_github:
@@ -13,7 +11,7 @@ sync_from_github:
 
   script:
     - echo "Starting clean-room sync..."
-    - git clone --mirror $GITHUB_REPO_URL .
+    - git clone --mirror ${GITHUB_REPO_URL} .
     - git push --mirror "https://gitlab-ci:${GITLAB_PUSH_TOKEN}@${CI_PROJECT_URL#https://}"
     - echo "Sync complete."
 
