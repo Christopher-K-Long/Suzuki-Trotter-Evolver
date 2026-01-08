@@ -5,7 +5,7 @@ You can run the unit tests yourself during the [build process](getting_started.m
 ```bash
 git clone https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver
 cd Suzuki-Trotter-Evolver
-cmake -S . -B build -DSuzuki-Trotter-Evolver_BUILD_TESTING=ON
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DSuzuki-Trotter-Evolver_BUILD_TESTING=ON
 cmake --build build -config Release --target install -j $(nproc)
 ```
 

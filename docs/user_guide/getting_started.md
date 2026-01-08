@@ -29,7 +29,7 @@ Suzuki-Trotter-Evolver can be installed as follows:
 ```bash
 git clone https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver
 cd Suzuki-Trotter-Evolver
-cmake -S . -B build # set optional flags here
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release # set optional flags here
 sudo cmake --build build --config Release --target install -j $(nproc)
 ```
 
