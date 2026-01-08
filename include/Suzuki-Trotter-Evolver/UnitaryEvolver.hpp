@@ -463,7 +463,8 @@ struct UnitaryEvolver {
         @return The propagated state vector:
         \f$\psi(N\Delta t)\f$.
 
-        Also see ``propagate_collection()`` and ``propagate_all()``.
+        Also see ``propagate_all()``, ``propagate_collection()``, and
+        ``get_evolution()``.
     */
     DMatrix<dim, 1> propagate(DMatrix<Dynamic, n_ctrl> ctrl_amp,
                               DMatrix<dim, 1> state,
@@ -558,7 +559,8 @@ struct UnitaryEvolver {
         @return The propagated state vectors:
         \f$\left(\psi_k(N\Delta t)\right)_k\f$.
 
-        Also see ``propagate()`` and ``propagate_all()``.
+        Also see ``propagate()``, ``propagate_all()``, and
+        ``get_evolution()``.
     */
     template<int l = Dynamic>
     DMatrix<dim, l> propagate_collection(DMatrix<Dynamic, n_ctrl> ctrl_amp,
@@ -654,7 +656,8 @@ struct UnitaryEvolver {
         @return The propagated state vector at each time step:
         \f$\left(\psi(n\Delta t)\right)_{n=0}^N\f$.
 
-        Also see ``propagate()`` and ``propagate_collection()``.
+        Also see ``propagate()``, ``propagate_collection()``, and
+        ``get_evolution()``.
     */
     DMatrix<dim, Dynamic> propagate_all(DMatrix<Dynamic, n_ctrl> ctrl_amp,
                                         DMatrix<dim, 1> state,
