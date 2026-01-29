@@ -70,8 +70,8 @@ double unitary_gate_infidelity(const Eigen::MatrixBase<Derived>& gate,
     \f$O(\texttt{dim}^3)\f$
     time for a
     \f$\texttt{dim}\times \texttt{dim}\f$
-    Hamiltonian. However, it  allows each step of the Suzuki-Trotter expansion
-    to be implimented in
+    Hamiltonian. However, it allows each step of the Suzuki-Trotter expansion to
+    be implemented in
     \f$O(\texttt{dim}^2)\f$
     time with matrix multiplication and only scalar exponentiation opposed to
     matrix exponentiation which takes
@@ -83,6 +83,8 @@ double unitary_gate_infidelity(const Eigen::MatrixBase<Derived>& gate,
     @tparam Matrix The type of matrix to use. `Matrix` must take the value
     \ref DMatrix<dim, dim> or \ref SMatrix for dense or sparse matrices,
     respectively.
+
+    Also see ``Evolver``.
 */
 template<int n_ctrl = Dynamic,
          int dim = Dynamic,
@@ -513,7 +515,7 @@ struct UnitaryEvolver {
         \f$a_{nj}\coloneqq a(n\Delta t)\f$,
         we set
         \f$a_{n0}=1\f$
-        for notational ease, and the addative error
+        for notational ease, and the additive error
         \f$\mathcal E\f$
         is
         @f[
@@ -706,7 +708,7 @@ struct UnitaryEvolver {
         \f$\langle\hat O\rangle
             \equiv\psi^\dagger(N\Delta t)\hat O\psi(N\Delta t)\f$.
 
-        Also see ``evolved_expectation_value_all()``
+        Also see ``evolved_expectation_value_all()``.
     */
     complex<double> evolved_expectation_value(DMatrix<Dynamic, n_ctrl> ctrl_amp,
                                               DMatrix<dim, 1> state,
@@ -733,7 +735,7 @@ struct UnitaryEvolver {
         @return The expectation value of the observable:
         \f$\left(\psi^\dagger(n\Delta t)\hat O\psi(N\Delta t)\right)_{n=0}^N\f$.
 
-        Also see ``evolved_expectation_value()``
+        Also see ``evolved_expectation_value()``.
     */
     DMatrix<Dynamic, 1>
     evolved_expectation_value_all(DMatrix<Dynamic, n_ctrl> ctrl_amp,
@@ -750,8 +752,11 @@ struct UnitaryEvolver {
         Hamiltonian modulated by the control amplitudes. The integration is
         performed using ``propagate()``.
 
+        \warning
+        This inner product does not conjugate the fixed vector.
+
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
@@ -778,8 +783,11 @@ struct UnitaryEvolver {
         control Hamiltonian modulated by the control amplitudes. The integration
         is performed using ``propagate_all()``.
 
+        \warning
+        This inner product does not conjugate the fixed vector.
+
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param state \f$\left[\psi(0)\right]\f$ The state vector to propagate.
@@ -933,29 +941,29 @@ struct UnitaryEvolver {
         expansion:     
         @f[
         \begin{align}
-            U(N\Delta t)&=\prod_{i=1}^N\prod_{j=0}^{\textrm{length}}
+            U(N\Delta t)&=\prod_{i=1}^N\prod_{j=0}^{\texttt{length}}
                 e^{-ia_{ij}H_j\Delta t}+\mathcal E\\
-            &=\prod_{i=1}^N\prod_{j=0}^{\textrm{length}}
+            &=\prod_{i=1}^N\prod_{j=0}^{\texttt{length}}
                 U_je^{-ia_{ij}D_j\Delta t}U_j^\dagger+\mathcal E.
         \end{align}
         @f]
         where
         \f$a_{nj}\coloneqq a(n\Delta t)\f$,
         we set
-        $a_{n0}=1$
+        \f$a_{n0}=1\f$
         for notational ease, and the additive error
         \f$\mathcal E\f$
         is
         @f[
         \begin{align}
         \mathcal E&=\mathcal O\left(
-            \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\textrm{length}}\dot a_{ij}
+            \Delta t^2\left[\sum_{i=1}^N\sum_{j=1}^{\texttt{length}}\dot a_{ij}
             \norm{H_j}
-            +\sum_{i=1}^N\sum_{j,k=0}^{\textrm{length}}a_{ij}a_{ik}
+            +\sum_{i=1}^N\sum_{j,k=0}^{\texttt{length}}a_{ij}a_{ik}
             \norm{[H_j,H_k]}\right]
             \right)\\
         &=\mathcal O\left(
-            N\Delta t^2\textrm{length}\left[\omega E+\alpha^2+E^2\right]
+            N\Delta t^2\texttt{length}\left[\omega E+\alpha^2+E^2\right]
             \right)
         \end{align}
         @f]
@@ -963,10 +971,10 @@ struct UnitaryEvolver {
         @f[
         \begin{align}
             \omega&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
-                j\in\left[1,\textrm{length}\right]}}\left|\dot a_{ij}\right|,\\
+                j\in\left[1,\texttt{length}\right]}}\left|\dot a_{ij}\right|,\\
             \alpha&\coloneqq\max_{\substack{i\in\left[1,N\right]\\
-                j\in\left[0,\textrm{length}\right]}}\left|a_{ij}\right|,\\
-            E&\coloneqq\max_{j\in\left[0,\textrm{length}\right]}\norm{H_j}.
+                j\in\left[0,\texttt{length}\right]}}\left|a_{ij}\right|,\\
+            E&\coloneqq\max_{j\in\left[0,\texttt{length}\right]}\norm{H_j}.
         \end{align}
         @f]
         Note the error is quadratic in \f$\Delta t\f$ but linear in \f$N\f$.
@@ -977,7 +985,7 @@ struct UnitaryEvolver {
         \f$\Omega\f$ is the largest energy or frequency in the system.
 
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param dt (\f$\Delta t\f$) The time step to evolve by.
@@ -1017,7 +1025,7 @@ struct UnitaryEvolver {
         ``get_evolution()``.
 
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param dt (\f$\Delta t\f$) The time step to evolve by.
@@ -1068,11 +1076,11 @@ struct UnitaryEvolver {
             &=\!\frac{2}{\texttt{dim}(\texttt{dim}+1)}\operatorname{Im}
                 \!\left(
                 \Tr\!\left[U^\dagger(N\Delta t)\cdot\texttt{target}\right]
-                \vphantom{[\prod_{k=j}^{\textrm{length}}}\right.\\
+                \vphantom{[\prod_{k=j}^{\texttt{length}}}\right.\\
                 &\left.\cdot\Tr\!\left[\texttt{target}^\dagger\!\cdot\!
-                \left[\prod_{i>n}^N\prod_{k=1}^{\textrm{length}}
+                \left[\prod_{i>n}^N\prod_{k=1}^{\texttt{length}}
                 e^{-ia_{ik}H_k\Delta t}\right]\!\!\!
-                \left[\prod_{k=j}^{\textrm{length}}
+                \left[\prod_{k=j}^{\texttt{length}}
                 e^{-ia_{nk}H_k\Delta t}\right]\!H_j\!\!
                 \left[\prod_{k=0}^{j-1}
                 e^{-ia_{nk}H_k\Delta t}\right]
@@ -1086,7 +1094,7 @@ struct UnitaryEvolver {
         as in ``get_evolution()``.
 
         @param ctrl_amp \f$\left(a_{ij}\right)\f$ The control amplitudes at each
-        time step expressed as an \f$N\times\textrm{length}\f$ matrix where the
+        time step expressed as an \f$N\times\texttt{length}\f$ matrix where the
         element \f$a_{ij}\f$ corresponds to the control amplitude of the
         \f$j\f$th control Hamiltonian at the \f$i\f$th time step.
         @param dt (\f$\Delta t\f$) The time step.
@@ -1097,7 +1105,7 @@ struct UnitaryEvolver {
         the switching function,
         \f$\phi_j(n\Delta t)\f$
         for all
-        \f$j\in\left[1,\textrm{length}\right]\f$
+        \f$j\in\left[1,\texttt{length}\right]\f$
         and
         \f$n\in\left[1,N\right]\f$.
 

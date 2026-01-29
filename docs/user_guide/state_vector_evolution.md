@@ -88,7 +88,7 @@ $$
 \mathcal E=\mathcal O\left(N\Delta t^2\cdot\texttt{length}\left[\omega E+\alpha^2E^2\cdot \texttt{length}\right]\right).
 $$(state_vector_evolution_14)
 
-Note the error is quadratic in $\Delta t$ but linear in $N$. We can also view this as being linear in $\Delta t$ and linear in total evolution time $N\Delta t$. Additionally, by Nyquist's theorem this asymptotic error scaling will not be achieved until the time step $\Delta t$ is smaller than $\frac{1}{2\Omega}$ where $\Omega$ is the largest energy or frequency in the system. In our [Rabi oscillation example](getting_started.md#quick-start) $\Omega=\max\left\{v,f\right\}$.
+Note the error is quadratic in $\Delta t$ but linear in $N$. We can also view this as being linear in $\Delta t$ and linear in total evolution time $N\Delta t$. Additionally, by Nyquist's theorem this asymptotic error scaling will not be achieved until the time step $\Delta t$ is smaller than $\frac{1}{2\Omega}$ where $\Omega$ is the largest energy or frequency in the system. In our [Rabi oscillation example](getting_started.md#quick-start), $\Omega=\max\left\{v,f\right\}$.
 
 Finally, we can diagonalise each term in the Hamiltonian, $H_j=U_jD_jU_j^\dagger$ where $U_j$ is a unitary and $D_j$ is diagonal. Substituting this diagonalised form into Eq. {eq}`state_vector_evolution_9` we find
 
