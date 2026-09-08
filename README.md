@@ -59,4 +59,4 @@ Releases from this repository are assigned DOIs and  can be found at [https://do
 
 ## Version and Changes
 
-The current version is [`1.1.1`](ChangeLog.md#release-111). Please see the [Change Log](ChangeLog.md) for more details. Suzuki-Trotter-Evolver uses [semantic versioning](https://semver.org/).
+The current version is [`1.1.2`](ChangeLog.md#release-112). Please see the [Change Log](ChangeLog.md) for more details. Suzuki-Trotter-Evolver uses [semantic versioning](https://semver.org/).

@@ -1,5 +1,9 @@
 # [Suzuki-Trotter-Evolver](README.md) Change Log
 
+## Release 1.12
+
+- Fixed bug where version checks would fail to accept [Eigen](https://eigen.tuxfamily.org/) version 3.4
+
 ## Release 1.1.1
 
 - Expanded support for [Eigen](https://eigen.tuxfamily.org/) versions to `>=3.4` and `<6`
