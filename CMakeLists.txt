@@ -18,7 +18,14 @@ option(Suzuki-Trotter-Evolver_BUILD_DOCS
        "Build the documentation for Suzuki-Trotter-Evolver."
        ${PROJECT_IS_TOP_LEVEL})
 
-find_package (Eigen3 3.4...<6 REQUIRED NO_MODULE)
+set(EIGEN_MINIMUM_VERSION 3.4)
+set(EIGEN_BELOW_VERSION 6)
+find_package(Eigen3 REQUIRED NO_MODULE)
+if (Eigen3_VERSION VERSION_LESS ${EIGEN_MINIMUM_VERSION} OR
+    Eigen3_VERSION VERSION_GREATER_EQUAL ${EIGEN_BELOW_VERSION})
+    message(FATAL_ERROR "Found Eigen ${Eigen3_VERSION}, but Suzuki-Trotter-Evolver "
+                        "requires >=${EIGEN_MINIMUM_VERSION} and <${EIGEN_BELOW_VERSION}.")
+endif()
 
 if(Suzuki-Trotter-Evolver_BUILD_TESTING)
   find_package(Catch2)
