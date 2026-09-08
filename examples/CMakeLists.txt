@@ -9,9 +9,10 @@ foreach(file ${files})
                  ${file})
 
   target_include_directories(
-    "${example}.exe" PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                             $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+    "${example}.exe" PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
   )
+
+  target_link_libraries("${example}.exe" PRIVATE Suzuki-Trotter-Evolver)
 
   add_custom_command(
     TARGET "${example}.exe"

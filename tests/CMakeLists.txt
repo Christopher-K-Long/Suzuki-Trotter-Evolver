@@ -14,10 +14,10 @@ target_sources(Suzuki-Trotter-Evolver_unit_tests
                src/unit_tests/test_UnitaryEvolver.cpp)
 
 target_include_directories(
-    Suzuki-Trotter-Evolver_unit_tests PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                                              $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
+    Suzuki-Trotter-Evolver_unit_tests PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
 
-target_link_libraries(Suzuki-Trotter-Evolver_unit_tests Catch2::Catch2WithMain)
+target_link_libraries(Suzuki-Trotter-Evolver_unit_tests
+                      PRIVATE Suzuki-Trotter-Evolver Catch2::Catch2WithMain)
 
 catch_discover_tests(Suzuki-Trotter-Evolver_unit_tests)
 

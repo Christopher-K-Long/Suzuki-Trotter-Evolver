@@ -407,7 +407,8 @@ TEST_CASE("propagate Rabi oscillation", "[UnitaryEvolver Propagation]") {
     }
     for (size_t j = 100000; j <= 1000000; j+=100000) {
         Matrix output_state =
-            evolver.propagate(ctrl_amp(Eigen::seqN(0,j), Eigen::all),
+            evolver.propagate(ctrl_amp(Eigen::seqN(0,j),
+                                       Eigen::placeholders::all),
                               initial_state,
                               dt);
         Matrix rwa_analytic_output_state
@@ -511,7 +512,8 @@ TEST_CASE("propagate_collection Rabi oscillation",
         ctrl_amp(k, 0) = omega*std::cos(2*k*dt); // Resonant drive
     }
     for (size_t j = 1000; j <= 10000; j+=1000) {
-        Matrix cropped_ctrl_amp = ctrl_amp(Eigen::seqN(0,j), Eigen::all);
+        Matrix cropped_ctrl_amp = ctrl_amp(Eigen::seqN(0,j),
+                                           Eigen::placeholders::all);
         Matrix output_state = evolver.propagate_collection(cropped_ctrl_amp,
                                                            initial_states,
                                                            dt);
@@ -630,7 +632,8 @@ TEST_CASE("propagate_all Rabi oscillation",
 
     for (size_t j = 1; j <= 100; j++) {
         target_output_states.col(j) =
-            evolver.propagate(ctrl_amp(Eigen::seqN(0,j), Eigen::all),
+            evolver.propagate(ctrl_amp(Eigen::seqN(0,j),
+                                       Eigen::placeholders::all),
                               initial_state,
                               dt);
     }
@@ -912,7 +915,8 @@ TEST_CASE("get_evolution Rabi oscillation",
         ctrl_amp(k, 0) = omega*std::cos(2*k*dt); // Resonant drive
     }
     for (size_t j = 1000; j <= 10000; j+=1000) {
-        Matrix cropped_ctrl_amp = ctrl_amp(Eigen::seqN(0,j), Eigen::all);
+        Matrix cropped_ctrl_amp = ctrl_amp(Eigen::seqN(0,j),
+                                           Eigen::placeholders::all);
         Matrix output_state = evolver.get_evolution(cropped_ctrl_amp, dt);
         Matrix expected_output_state =
             evolver.propagate_collection(cropped_ctrl_amp,

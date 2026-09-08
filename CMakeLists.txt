@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...4.0)
+cmake_minimum_required(VERSION 3.19...4.0)
 project(Suzuki-Trotter-Evolver VERSION 1.1.0
                                DESCRIPTION
                                    "A C++ header-only library for evolving states under the Schrödinger equation using first-order Suzuki-Trotter and computing switching functions."
@@ -18,8 +18,7 @@ option(Suzuki-Trotter-Evolver_BUILD_DOCS
        "Build the documentation for Suzuki-Trotter-Evolver."
        ${PROJECT_IS_TOP_LEVEL})
 
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
-include_directories(${EIGEN3_INCLUDE_DIRS})
+find_package (Eigen3 3.4...<6 REQUIRED NO_MODULE)
 
 if(Suzuki-Trotter-Evolver_BUILD_TESTING)
   find_package(Catch2)
