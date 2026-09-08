@@ -28,7 +28,7 @@ These optional flags should be appended to ``cmake -S ../.. -B build``. All thre
 
 Runs on Linux, macOS, and Windows. Requires:
 
-- [Eigen3](https://eigen.tuxfamily.org/)
+- [Eigen](https://eigen.tuxfamily.org/)
 
 #### Additional requirements for testing
 
@@ -59,4 +59,4 @@ Releases from this repository are assigned DOIs and  can be found at [https://do
 
 ## Version and Changes
 
-The current version is [`1.1.0`](ChangeLog.md#release-110). Please see the [Change Log](ChangeLog.md) for more details. Suzuki-Trotter-Evolver uses [semantic versioning](https://semver.org/).
+The current version is [`1.1.1`](ChangeLog.md#release-111). Please see the [Change Log](ChangeLog.md) for more details. Suzuki-Trotter-Evolver uses [semantic versioning](https://semver.org/).
