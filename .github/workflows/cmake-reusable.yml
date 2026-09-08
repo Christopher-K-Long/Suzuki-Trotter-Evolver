@@ -36,6 +36,9 @@ jobs:
     name: Build and Test ${{ inputs.os }}
     runs-on: ${{ inputs.os }}
 
+    env:
+      VCPKG_BINARY_SOURCES: clear
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -46,11 +49,19 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
 
+      - name: Read vcpkg baseline
+        id: vcpkg_baseline
+        shell: bash
+        run: >
+          echo "commit=$(jq -r '."default-registry".baseline' vcpkg-configuration.json)"
+          >> "$GITHUB_OUTPUT"
+
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         id: runvcpkg
         with:
           vcpkgDirectory: '${{ github.workspace }}/b/vcpkg'
+          vcpkgGitCommitId: '${{ steps.vcpkg_baseline.outputs.commit }}'
           runVcpkgInstall: true
           vcpkgJsonGlob: 'vcpkg.json'
           vcpkgConfigurationJsonGlob: 'vcpkg-configuration.json'

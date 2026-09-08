@@ -2,10 +2,7 @@
   "name": "suzuki-trotter-evolver",
   "version": "1.1.1",
   "dependencies": [
-    {
-      "name": "catch2",
-      "host": true
-    },
+    "catch2",
     "eigen3"
   ]
 }
