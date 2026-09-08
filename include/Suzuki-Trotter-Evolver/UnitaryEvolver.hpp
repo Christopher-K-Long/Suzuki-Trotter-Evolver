@@ -37,7 +37,7 @@ template<int n = Dynamic, int m = Dynamic> using DMatrix =
 
     Also see \ref DMatrix.
 */
-typedef Eigen::SparseMatrix<complex<double>> SMatrix;
+typedef Eigen::SparseMatrix<complex<double>, Eigen::RowMajor> SMatrix;
 
 /**
     Computes the gate infidelity between a gate and a target gate:

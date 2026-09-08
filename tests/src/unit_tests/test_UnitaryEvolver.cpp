@@ -11,7 +11,7 @@ using namespace Suzuki_Trotter_Evolver;
 using std::complex;
 
 typedef Eigen::Matrix<complex<double>, Dynamic, Dynamic> Matrix;
-typedef Eigen::SparseMatrix<complex<double>> SMatrix;
+typedef Eigen::SparseMatrix<complex<double>, Eigen::RowMajor> SMatrix;
 typedef Eigen::Array<complex<double>, Dynamic, Dynamic> Array;
 
 // Initialisation Tests
