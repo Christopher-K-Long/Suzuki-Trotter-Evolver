@@ -28,11 +28,11 @@ These optional flags should be appended to ``cmake -S ../.. -B build``. All thre
 
 Runs on Linux, macOS, and Windows. Requires:
 
-- [Eigen](https://eigen.tuxfamily.org/)
+- [Eigen](https://eigen.tuxfamily.org/) (`>=3.4` and `<6`)
 
 #### Additional requirements for testing
 
-- [Catch2](https://github.com/catchorg/Catch2)
+- [Catch2](https://github.com/catchorg/Catch2) (`>=3`)
 
 #### Additional requirements for building documentation
 
