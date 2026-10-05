@@ -20,7 +20,7 @@ authors:
     affiliation: University of Cambridge
     orcid: 'https://orcid.org/0000-0001-7337-7245'
   - given-names: Normann
-    family-names: Metrig
+    family-names: Mertig
     affiliation: Hitachi Cambridge Laboratory
     orcid: 'https://orcid.org/0000-0003-3025-7141'
 repository-code: 'https://github.com/Christopher-K-Long/Suzuki-Trotter-Evolver'
